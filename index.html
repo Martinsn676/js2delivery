@@ -4,40 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in page</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="src\scss\main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
+    <script defer src="js/userForms.js"></script>
+    <script defer src="js/apiCalls.js"></script>
+    <script defer src="js/global.js"></script>
 </head>
 <body>
-    <div class="">
-    <h1 class="">Please log into your account</h1>
-    <form id="logInForm" class="w-6 flex-column validation-needed" method="get" novalidate>
-        <div class="">
+<main class="container">
+    <form id="loginForm" class="col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
+        <div class="m-3">
             <label for="email" class="form-label">E-mail</label>
-            <input required type="text" class="form-input" id="emailInput" name="email" value="jenn32@stud.noroff.no">
+            <input required type="text" class="form-control" id="emailInput" name="email" value="jenn32@stud.noroff.no">
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
-        <div class="">
+        <div class="m-3">
             <label for="password" class="form-label">Password</label>
-            <input
-                type="password"
-                class="form-input"
-                id="passwordInput"
-                name="password"
-                placeholder="Password"
-                pattern=".{8,}"
-                title="Password must be at least 8 characters long."
-                value="noroffSucks"
-                required
-            />
+            <input required type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="noroffSucks">
             <div class="invalid-feedback">
                 Password must be at least 8 characters long.
             </div>
-        </div>       
-<div id="loginErrorMessage" class="error-message alert alert-danger d-none text-center">
-</div>
-        <button class="btn btn-primary m-3" type="submit">Submit form</button>
+        </div>
+        <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
+        </div>
+        <button class="btn btn-primary m-3" type="submit">Log in</button>
+    </form>
 
+
+    <form id="creatUserForm" class="col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
+        <div class="m-3">
+            <label for="userName" class="form-label">Username</label>
+            <input required type="text" class="form-control" id="usernameInput" name="username" value="jenn32">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="m-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input required type="text" class="form-control" id="emailInput" name="email" value="jenn32@stud.noroff.no">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="m-3">
+            <label for="password" class="form-label">Password</label>
+            <input required type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="noroffSucks">
+            <div class="invalid-feedback">
+                Password must be at least 8 characters long.
+            </div>
+        </div>
+        <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
+        </div>
+        <button class="btn btn-primary m-3" type="submit">Crate User</button>
+    </form>
+</div>
+</main>
 </body>
 </html>

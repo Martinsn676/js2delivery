@@ -1,0 +1,70 @@
+    <form id="createPost" class="col-12 container" >
+        <label for="imageUrl" class="form-label">Image url</label>
+        <input required type="text" class="form-control" id="imageUrlInput" name="imageUrl" value="">
+        <label for="title" class="form-label">Title</label>
+        <input required type="text" class="form-control" id="titleInput" name="title" value="">
+        <label for="text" class="form-label">Text</label>
+        <textarea id="textInput" name="text" class="mb-2 form-control border-primary" rows="2" placeholder="Description"></textarea>
+
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tagInput" placeholder="Add tags" aria-label="Add tags" aria-describedby="add-tags">
+        <button class="btn btn-outline-secondary" type="button" id="add-tags">Add</button>
+        </div>
+        <ul id="tags-list" class="list-unstyled"></ul>
+        <div class="row col-12">
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary">Post</button>
+            </div>
+        </div>
+        <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
+        </div>
+    </form>
+
+<form id="editPost" class="col-12" >
+        <label for="imageUrl" class="form-label">Image url</label>
+        <input required type="text" class="form-control" id="imageUrlInput" name="imageUrl" value="">
+
+        <label for="title" class="form-label">Title</label>
+        <input required type="text" class="form-control" id="titleInput" name="title" value="My first post">
+
+        <label for="text" class="form-label">Text</label>
+        <textarea id="textInput" name="text" class="mb-2 form-control border-primary" rows="2" placeholder="Description"></textarea>
+
+        <input type="text" class="form-control d-none" id="postID" name="postID" value="">
+
+        <label for="tags" class="form-label">Tags</label>
+        <input type="text" class="form-control" id="tagsInput" name="tags" value="Funny, duck">
+
+        <div class="row col-12">
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary">Edit post</button>
+            </div>
+            <div class="col-6">
+                <button onclick="activateForm('post')" class="btn btn-primary">Cancel</button>
+            </div>
+        </div>
+        <div id="loginErrorMessage" class="error-message alert alert-danger d-none text-center">
+        </div>
+    </form>
+    <form id="createPost" class="col-12" >
+        <label for="imageUrl" class="form-label">Image url</label>
+        <input required type="text" class="form-control" id="imageUrlInput" name="imageUrl" value="">
+        <label for="title" class="form-label">Title</label>
+        <input required type="text" class="form-control" id="titleInput" name="title" value="">
+        <label for="text" class="form-label">Text</label>
+        <textarea id="textInput" name="text" class="mb-2 form-control border-primary" rows="2" placeholder="Description"></textarea>
+
+<div class="input-group mb-3">
+  <input type="text" class="form-control" id="tagInput" placeholder="Add tags" aria-label="Add tags" aria-describedby="add-tags">
+  <button class="btn btn-outline-secondary" type="button" id="add-tags">Add</button>
+</div>
+<ul id="tags-list" class="list-unstyled"></ul>
+
+        <div class="row col-12">
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary">Post</button>
+            </div>
+        </div>
+        <div id="loginErrorMessage" class="error-message alert alert-danger d-none text-center">
+        </div>
+    </form>

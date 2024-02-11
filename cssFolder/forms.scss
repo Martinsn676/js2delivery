@@ -1,20 +1,5 @@
-:root{
-    --body-color:black;
-    --form-bg-color:white;
-    --form-border:grey;
-    --border-radius: 20px;
-    --border-width:2px;
-}
 
-  /* Apply the font to the body */
-  body {
 
-    font-family: 'Roboto', sans-serif;
-  }
-  /* Additional styling can be applied as needed */
-  h1, p {
-    font-weight: thin;
-  }
 form{
   .form-label{
       margin-bottom: 1rem;
@@ -34,7 +19,8 @@ form{
       border-radius: var(--border-radius);
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   }
-
-
 }
-
+#editPost{
+    display: none;
+}
+body{background-color: red!important;}

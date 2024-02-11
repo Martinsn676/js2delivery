@@ -1,0 +1,75 @@
+const baseUrl = 'https://v2.api.noroff.dev'
+const logInEndPoint = '/auth/login'
+const createEndpoint  = '/auth/register'
+const getApiKeyEndpoint = '/auth/create-api-key'
+const postsEndpoint = '/social/posts'
+const searchEndpoint = '/social/posts/search?q='
+const getApi = 'GET'
+const postApi = 'POST'
+const deleteApi = 'DELETE'
+const putApi = 'PUT'
+/**
+ * 
+ * @param {any} data String for search, number to target post, object to post forms
+ * @param {string} endPoint use the variable that gives the correct endpoint (located in apiCalls.js)
+ * @param {string} method the Method needed
+ * @returns {response}
+ */
+async function apiCall(data,endPoint,method,id) {
+    let url = baseUrl + endPoint;
+    method = method ? method : "GET"
+    data = data ? data : ""
+    console.log(endPoint,id)
+    if(endPoint===searchEndpoint){
+        if(data.length>0){
+            url+=data
+        }else{
+            url = baseUrl + postsEndpoint
+        }
+    }else if(id){
+        url+="/"+id
+    }
+    
+    const postData = {
+        method: method,
+    };
+    if(typeof data === 'object'){
+        postData.body = JSON.stringify(data);
+    }
+    let accesstoken = await getLocal('accesstoken')
+    accesstoken = accesstoken ? `Bearer ${accesstoken}`: "";
+    let apiKey = await getLocal('apiKey')
+    apiKey = apiKey ? apiKey: "";
+    postData.headers = {
+        'Content-Type': 'application/json',
+        'Authorization': accesstoken,
+        "X-Noroff-API-Key": apiKey,
+        };
+    response = await fetchApi(url, postData)
+    console.log(response)
+    return response
+}
+async function fetchApi(url, postData){
+    try {
+        console.log("Fetching:",url, postData)
+        const response = await fetch(url, postData);
+        return response        
+    } catch (error) {
+        console.error("Error occurred:", error);
+        return null; // or throw error if needed
+    }
+
+}
+async function getErrorJson(respons,origin){
+    const json = await respons.json()
+    const errors = json.errors
+    origin = origin ? origin : 'No manual origin'
+    let errorMessages = ""
+    errors.forEach(error => {
+        errorMessages+=error.message+"!"
+    });
+    console.warn(errorMessages)
+    console.log('Origin of error:',origin)
+    console.trace()
+    return 
+}

@@ -1,0 +1,9 @@
+.only-edit-mode{
+    display: none;
+}
+#post-form.edit-mode .only-edit-mode{
+    display: inline-block;
+}
+#post-form.edit-mode .only-post-mode{
+    display: none;
+}
