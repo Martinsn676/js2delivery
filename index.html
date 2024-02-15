@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in page</title>
-    <link rel="stylesheet" href="src\scss\main.css">
+    <link rel="stylesheet" href="../css/custom.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/lazy.css">
+    <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
     <script defer src="js/userForms.js"></script>
     <script defer src="js/apiCalls.js"></script>
@@ -12,7 +15,8 @@
 </head>
 <body>
 <main class="container">
-    <form id="loginForm" class="col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
+<div class="form-container col-6">
+    <form id="loginForm" class="form-container col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
         <div class="m-3">
             <label for="email" class="form-label">E-mail</label>
             <input required type="text" class="form-control" id="emailInput" name="email" value="jenn32@stud.noroff.no">
@@ -33,7 +37,7 @@
     </form>
 
 
-    <form id="creatUserForm" class="col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
+    <form id="creatUserForm" class="form-container col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
         <div class="m-3">
             <label for="userName" class="form-label">Username</label>
             <input required type="text" class="form-control" id="usernameInput" name="username" value="jenn32">

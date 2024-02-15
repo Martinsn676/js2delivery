@@ -15,24 +15,28 @@ const putApi = 'PUT'
  * @param {string} method the Method needed
  * @returns {response}
  */
-async function apiCall(data,endPoint,method,id) {
+async function apiCall(data,endPoint,method,endUrl) {
     let url = baseUrl + endPoint;
     method = method ? method : "GET"
     data = data ? data : ""
-    console.log(endPoint,id)
     if(endPoint===searchEndpoint){
         if(data.length>0){
             url+=data
         }else{
             url = baseUrl + postsEndpoint
         }
-    }else if(id){
-        url+="/"+id
     }
-    
+    console.log(endUrl)
+    if(endUrl){
+        if(typeof endUrl === 'number'){
+            url+="/"+endUrl
+        }else if(typeof endUrl === 'string')
+            url+="?"+endUrl
+    }
     const postData = {
         method: method,
     };
+    //Send body if object provided
     if(typeof data === 'object'){
         postData.body = JSON.stringify(data);
     }
@@ -46,7 +50,6 @@ async function apiCall(data,endPoint,method,id) {
         "X-Noroff-API-Key": apiKey,
         };
     response = await fetchApi(url, postData)
-    console.log(response)
     return response
 }
 async function fetchApi(url, postData){
@@ -71,5 +74,5 @@ async function getErrorJson(respons,origin){
     console.warn(errorMessages)
     console.log('Origin of error:',origin)
     console.trace()
-    return 
+    return errorMessages
 }

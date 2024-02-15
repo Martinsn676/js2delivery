@@ -1,0 +1,133 @@
+
+
+// Define CSS variables
+:root {
+  --media-post-padding: 50px;
+}
+
+// Use the CSS variables within SCSS
+#sideMenu {
+    max-width: 200px;
+    .iconButton{
+        margin-bottom: 10px;
+    }
+    .main-logo img{
+        width: 100%;
+    }
+  // Apply a media query using the CSS variable
+  @media (max-width: 500px) {
+    display: none;
+
+  }
+}
+#feedContainer > div {
+    width: calc(100% - var(--media-post-padding));
+    @media (min-width: 600px) {
+        width: calc(50% - var(--media-post-padding));
+    }
+    @media (min-width: 800px) {
+        width: calc(33.33% - var(--media-post-padding));
+    }
+
+    @media (min-width: 1000px) {
+        width: calc(25% - var(--media-post-padding));
+    }
+
+    @media (min-width: 1200px) {
+        width: calc(20% - var(--media-post-padding));
+    }
+}
+
+#post-form,#mobile-form{
+    .only-edit-mode{
+        display: none;
+    }
+    &.edit-mode{
+        .only-edit-mode{
+            display: inline-block;
+        }
+        .only-post-mode{
+            display: none;
+        }
+    }
+    .buttons{
+        .button-container{
+            padding: 5px;
+        }
+    }
+}
+/* Form container */
+// .form-container {
+//   max-width: 400px;
+//   margin: 0 auto;
+//   padding: 20px;
+//   border: 1px solid #ccc;
+//   border-radius: 5px;
+//   background-color: #f9f9f9;
+// }
+
+
+#sideMenu{
+    li{
+        margin-bottom: 5px;
+    }
+}
+
+#top-section,#bottom-menu{
+    background-color: white;
+    width: 100vw;
+    ul{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-left: 0;
+        li{
+            list-style: none;
+            margin: auto auto;
+        }
+        span{
+            display: none;
+        }
+    }
+}
+#top-section{
+    position: fixed;
+    top: 0;
+    left: 0;
+    ul{
+        margin-top: 0;
+        margin-bottom: 0;
+        .main-logo{
+            img{
+                max-width: 100%;
+                padding: 0;
+            }
+        }
+    }
+
+}
+
+#bottom-menu{
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+}
+
+#mobile-form{
+    height: 100vh;
+    &.form-hidden{
+        display: none;
+    }
+}
+
+main{
+    @media (max-width: 500px) {
+        padding-top: 60px;
+    }
+}
+#filter-menu{
+    padding-top: 20px;
+    background-color: white;
+}

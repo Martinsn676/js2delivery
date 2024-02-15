@@ -44,4 +44,18 @@ function cleanDate (dateString){
     const formattedDate = `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
     return formattedDate
 }
-
+/**
+ * 
+ * @returns Localsave username
+ */
+function getUserName(){
+    const userName = getLocal('userName')
+    return userName
+}
+/**
+ * Deletes local storage and moves to /index.html
+ */
+function signOut(){
+    localStorage.clear()
+    window.location.href = '../index.html'
+}

@@ -4,47 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in page</title>
-    <link rel="stylesheet" href="../src/scss\main.css">
-    <link rel="stylesheet" href="../src/scss\custom.css">
+    <link rel="stylesheet" href="../css/custom.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/lazy.css">
+    <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
     <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-
+    <link rel="manifest" href="/favicon/site.webmanifest">
     <script src="../js/apiCalls.js"></script>
     <script src="../js/global.js"></script>
     <script defer src="../js/menus.js"></script>
-    <script defer src="./feed.js"></script>
+    <script defer src="../js/loadPosts.js"></script>
     <script defer src="../js/postForms.js"></script>
 </head>
-<body class="text-bg-light container-fluid mt-3">
-<header>
+
+<body class="text-bg-light">
+<!-- Top menu for mobile -->
+<header id="top-section" class="fixed-top col-12 col-lg-10">
 </header>
-<main>
-  <div class="row">
-    <div class="col-3 col d-none d-sm-inline">
-        <nav id="nav-menu" class="navbar">
-        </nav>
-        <section id="post-form-container">
-        </section>
-    </div>
-    <div class="col">
-      <section id="top-section" class="row mb-1 col-lg-10 justify-content-between">
-        <div class="col-lg-5 col-6">
+<main class="container-fluid">
+  <!-- add the mobile form -->
+  <div id="mobile-form" class="form-hidden">
+  </div>
+  <div id="feed-contentdisable" class="flex-row">
+
+    <section id="sideMenu" class="fixed-top">
+      <!-- add side menu -->
+      <nav id="nav-menu" class="navbar"></nav>
+      <!-- add post form under -->
+      <form id="post-form" class="form-container col-12 flex-column"></form>
+    </section>
+    <section class="col">
+      <!-- Top row filter -->
+      <div id="filter-menu" class="flex-row justify-content-between">
+        <!-- Search field -->
+        <div class="col ">
           <input id="searchField" type="text" class="form-control border-primary text-left rounded-1"
             placeholder="Themes, feelings, places ... ">
         </div>
-        <div class="col-3">
-          <select class="form-control text-center  border-primary">
+        <div class="col">
+          <select class="">
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>
               <option value="popularity">Popularity</option>
           </select>
         </div>
-      </section>
-      <section id="feedContainer" class="row col-lg-10">
-      </section>
-    </div>
+      </div>
+      <!-- add modal -->
+      <div id="modal" class="hide-modal">
+        <div class="modal-display"></div>
+        <div class="modal-back-ground"></div>
+
+      </div>
+      <!-- add posts to feed -->
+      <div id="feedContainer" class="flex-row flex-wrap"></div>
+
+    </section>
   </div>
+<!-- Bottom menu for mobile -->
+<footer id="bottom-menu" class="fixed-bottom">
+</footer>
+
 </main>
+</body>

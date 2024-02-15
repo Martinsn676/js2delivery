@@ -1,5 +1,5 @@
 async function submitPostForm(event) {
-    let testMode = true;
+    let testMode = false;
     console.log('submit!')
     event.preventDefault();
     const formTarget = event.target;
@@ -21,8 +21,7 @@ async function submitPostForm(event) {
         const imageAlt = imageUrlInput ? 'User uploaded post image' : false;
 
         if(testMode){console.log("title:", title, "body:", body, "imageUrl:","id",id, "image",imageUrl);}
-        const errorMessageText = formTarget.querySelector('#errorMessageText')
-        errorMessageText.classList.add('d-none')
+        formObject.clearWarning()
 
         let data = {}
         let errorMessage = ""
@@ -31,30 +30,32 @@ async function submitPostForm(event) {
         if(title){
             data.title=title
             data.body=body
+            data.tags=tagsObject.tags
             data.media={
                 'url':imageUrl,
                 'alt':imageAlt,
             }
         }
-        if(formContainer.classList.contains('edit-mode')){
+        if(formTarget.classList.contains('edit-mode')){
             const response = await apiCall(data,postsEndpoint,putApi,id)
             if(response.ok){
                 addPosts()
             }else{
-                getErrorJson(response,'edit post')
+                errorMessage=await getErrorJson(response,'edit post')
             }
         }else{
             const response = await apiCall(data,postsEndpoint,postApi)
             if(response.ok){
                 addPosts()
             }else{
-                getErrorJson(response,'create post')
+                errorMessage=await getErrorJson(response,'create post')
             }
         }
         if(errorMessage!=""){
             errorMessageText.innerText=errorMessage;
             errorMessageText.classList.remove('d-none')
         }else{
+            formObject.clearForm()
             addPosts()
         }
     }else{
