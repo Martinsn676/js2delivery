@@ -48,6 +48,8 @@ const postsObject = {
     async updatePosts(search,filter){
         search = search ? search :""
         filter = filter ? filter :""
+        const urlFilter = getUrlParam('tag')
+        filter = urlFilter ? `&_tag=${urlFilter}` : filter
         let searchResult = "Showing all posts"
         const response = await apiCall(search, searchEndpoint, getApi, this.settings.endApi+filter);
         const json = await response.json();
@@ -55,11 +57,18 @@ const postsObject = {
         this.addPosts(postsArray)
         const searchResultContainer = document.getElementById('searchResultContainer')
         if(search!=""){
-            searchResult="Showing search result for "+search
+            searchResult=`
+            <div>
+                Showing search result for "${search}"
+            </div>
+            <a href="/feed/index.html">
+                Reset
+            </a>`
         }
         if(filter!=""){
             const splitFilter = filter.split('=');
-            searchResult="Showing posts with the tag: "+splitFilter[1]
+            searchResult="<div>Showing posts with the tag: "+splitFilter[1]+"</div>"
+        searchResult+=`<a href="/feed/index.html">Reset</a>`
         }
         if(searchResultContainer){
             searchResultContainer.innerHTML=searchResult
@@ -92,7 +101,7 @@ const postsObject = {
                 }
                 if (tags) {
                     tags.forEach(tag => {
-                        tagHtml += `<li>${tag}</li>`;
+                        tagHtml += `<li class="tag">${tag}</li>`;
                     });
                 }
                 if (this.user === author.name) {
@@ -113,7 +122,8 @@ const postsObject = {
                         commentHtml+="</div>"
                     };
                 }
-                if(reactions){
+                //           //  someting is wrong
+                if(reactions[0]){
                     for(let i = 0 ; i < reactions.length; i++){
                         if(reactions[i].reactors.find(reactor => reactor === this.user)){
                             reactiosnHtml+=`<div class="post-reactions active">`
@@ -133,6 +143,7 @@ const postsObject = {
         <div class="media-post flex-row">
             <div class="flex-column left-side">
                 <div class="text-box">
+                    <a href="/profile/index.html?user=${author.name}">${author.name}</a>
                     <h3 class="title">${title}</h3>
                     <p class="fs-6 text">${body}</p>
                 </div>
@@ -197,7 +208,34 @@ const postsObject = {
             if(media){
                 showCount++
                 const mediaPost =  postContainer.querySelector('.media-post')
-                mediaPost.addEventListener("click", () => this.displayPost(id));
+                mediaPost.addEventListener("click", (event) =>{
+                console.log(event.target.tagName)
+                if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'LI' || event.target.tagName === 'I') {
+                    // If it is, do nothing (stop propagation)
+                    return;
+                }
+                    this.displayPost(id)
+                });
+                //Add tags clicks
+                const tags = mediaPost.querySelectorAll('.tag')
+                tags.forEach((tag)=>{
+                    tag.addEventListener('click',(event)=>{
+                        event.preventDefault();
+                        const tagText = event.target.innerText
+                        window.history.pushState({}, '', 'index.html?tag='+tagText);
+                        this.searchForTag(tagText)
+                        modalObject.hide()
+                    })
+                })
+                if (this.user === post.author.name) {
+                    const editButton = mediaPost.querySelector('.edit-button')         
+                    editButton.addEventListener("click", (event) =>{
+                        event.preventDefault()
+                        formObject.editThis(post)
+                        modalObject.modalContainer.classList.add('hide-modal')
+                        modalObject.modalDisplay.innerHTML=""
+                    });
+                }
             }else{
                 noImageCount++
             }
@@ -236,16 +274,15 @@ const postsObject = {
                 await this.updatePosts()
                 this.displayPost(Number(findID))
             });
-            //Add tags
+            //Add tags clicks
             const tags = modalObject.modalContainer.querySelectorAll('li')
             tags.forEach((tag)=>{
                 tag.addEventListener('click',(event)=>{
-console.log("tag clicked")
-                    event.preventDefault();
-                    window.history.pushState({}, '', 'index.html');
-                    this.searchForTag(event.target.innerText)
-                    
-                    modalObject.hide()
+                        event.preventDefault();
+                        const tagText = event.target.innerText
+                        window.history.pushState({}, '', 'index.html?tag='+tagText);
+                        this.searchForTag(tagText)
+                        modalObject.hide()
                 })
             })
             //Add listener to like button
@@ -278,7 +315,8 @@ console.log("tag clicked")
             //Add post edit button if user owns post
             if (this.user === post.author.name) {
                 const editButton = modalObject.modalDisplay.querySelector('.edit-button')         
-                editButton.addEventListener("click", () =>{
+                editButton.addEventListener("click", (event) =>{
+                    event.preventDefault()
                     formObject.editThis(post)
                     modalObject.modalContainer.classList.add('hide-modal')
                     modalObject.modalDisplay.innerHTML=""

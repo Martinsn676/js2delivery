@@ -4,10 +4,16 @@
 :root {
   --media-post-padding: 10px;
 }
-
+main{
+    @media (min-width: 1000px) {
+        max-width: 1200px;
+        margin: auto;
+    }
+}
 // Use the CSS variables within SCSS
 #sideMenu {
     max-width: 200px;
+    padding-right: 20px;
     .iconButton{
         margin-bottom: 10px;
     }
@@ -30,10 +36,6 @@
 
     @media (min-width: 1000px) {
         width: calc(25% - var(--media-post-padding));
-    }
-
-    @media (min-width: 1200px) {
-        width: calc(20% - var(--media-post-padding));
     }
 }
 

@@ -1,13 +1,17 @@
 
 const profile = {
     'profilePage':document.getElementById('profile-page'),
-    'userName':getUserName(),
+    'userName':'',
     'userData':[],
     async setup(){
+        this.userName = getUrlParam('user') ? getUrlParam('user') : getUserName()
         const respons = await apiCall('',profileEndPoint,getApi,'/'+this.userName)
         const json = await respons.json()    
         this.userData = json.data
-        console.log(this.userData)
+        this.loggedInUser = getUserName()
+        console.log("userName",this.userName)
+    console.log(getUrlParam('user'))
+        console.log(" this.userData", this.userData)
         this.profilePage.innerHTML=this.template(this.userData)
         const postRespons = await apiCall('',profileEndPoint+"/"+this.userName+"/posts"+"?",getApi, postsObject.settings.endApi)
         const jsonPosts = await postRespons.json()
@@ -16,12 +20,11 @@ const profile = {
         profile.addFunctions()
     },
     template({avatar,banner,bio,email,name}){
-//<div id="banner-image" style="background-image: url('${banner.url}');">
         return `
     <div class="flex-column">
         <div id="banner-container">
             <img src="${banner.url}">
-            <button id="" class="edit-button icon-button">
+            <button id="" class="edit-button icon-button d-none">
                 <i class="bi bi-pencil-fill"></i>
             </button>
         </div>
@@ -29,7 +32,7 @@ const profile = {
             <div class="left-side col-6">
 
                 <div id="image-container" class="">
-                    <button id="" class="edit-button icon-button">
+                    <button id="" class="edit-button icon-button d-none">
                         <i class="bi bi-pencil-fill"></i>
                     </button>
                     <img id="profile-image" src="${avatar.url}">
@@ -42,19 +45,22 @@ const profile = {
                 </div>
             </div>
         </div>
-    </div>
-
-        `
+    </div>`
     },
     addFunctions(){
-        const bannerImage = document.querySelector('#banner-container .edit-button')
-        bannerImage.addEventListener('click',()=>{
-            this.editImage('banner')
-        })
-        const profileImage = document.querySelector('#image-container  .edit-button')
-        profileImage.addEventListener('click',()=>{
-            this.editImage('profile')
-        })
+        if(this.loggedInUser===this.userData.name){
+            const bannerImage = document.querySelector('#banner-container .edit-button')
+            bannerImage.classList.remove('d-none')
+            bannerImage.addEventListener('click',()=>{
+                this.editImage('banner')
+            })
+            const profileImage = document.querySelector('#image-container  .edit-button')
+            profileImage.classList.remove('d-none')
+            profileImage.addEventListener('click',()=>{
+                this.editImage('profile')
+            })
+        }
+
     },
     editImage(editing){
         modalObject.modalDisplay.innerHTML=this.changeImageForm()

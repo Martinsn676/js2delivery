@@ -11,10 +11,10 @@ const menu ={
         ['bi bi-instagram', 'Explore','../feed/index.html','button'],
         ['bi bi-play-circle', 'Videos',noUrl,'button'],
         ['bi bi-chat', 'Messages',noUrl,'button'],
-        ['bi bi-person', 'Profile',noUrl,'button'],
+        ['bi bi-person', 'Profiles','../profile/allProfiles.html','button'],
         ['bi bi-bell', 'Notifications',noUrl,'button'],
         ['bi bi-gear', 'Settings',noUrl,'button'],
-        ['',`Logged in as ${getUserName()}`,'../profile/index.html','mt-4',],
+        ['',`Logged in as ${getUserName()}`,`../profile/index.html?user=${getUserName()}`,'mt-4',],
         ['bi bi-box-arrow-in-left', 'Log out','signOut()','button'],
         
     ],
@@ -108,7 +108,9 @@ function addMenus (){
     formObject.templateFunctions()
     
     formObject.container.addEventListener('submit', (event) => submitPostForm(event));
-    document.getElementById('imageUrlInput').addEventListener('change',()=>formObject.updateImagePreview())
+    imageInput = document.querySelector('#sideMenu #imageUrlInput')
+    console.log(imageInput)
+    imageInput.addEventListener('change',()=>formObject.updateImagePreview(event))
     
 
     tagsObject.tagsLists = document.querySelectorAll('.tags-list')
@@ -188,16 +190,16 @@ const formObject = {
         const errorMessageText = formObject.container.querySelector('#errorMessageText')
         errorMessageText.classList.add('d-none')
     },
-    updateImagePreview(url){
-        const imagePreview = document.getElementById('imagePreview')
-        url = url ? url :document.getElementById('imageUrlInput').value
+    updateImagePreview(event){
+        const value = document.querySelector('#sideMenu #imageUrlInput').value
+        url = value ? value :""
+        const imagePreview = document.querySelector('#sideMenu #imagePreview')
         const dummyImage = new Image();
         if(url===""){
             imagePreview.classList.add('d-none')
         }else{
             imagePreview.classList.remove('d-none')
-            dummyImage.src=url
-
+            imagePreview.src=url
             dummyImage.onload = function(){
                 imagePreview.src=url
             }
@@ -233,7 +235,7 @@ const formObject = {
         this.container.querySelector('#delete-button').addEventListener("click", () => postsObject.deletePost());
     },
     'postTemplate':`
-        <img id="imagePreview" src="" class="col-12">
+        
         <input 
             type="text" 
             class="d-none clearable" 

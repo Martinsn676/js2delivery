@@ -2,8 +2,16 @@
   --media-post-padding: 10px;
 }
 
+@media (min-width: 1000px) {
+  main {
+    max-width: 1200px;
+    margin: auto;
+  }
+}
+
 #sideMenu {
   max-width: 200px;
+  padding-right: 20px;
 }
 #sideMenu .iconButton {
   margin-bottom: 10px;
@@ -33,11 +41,6 @@
 @media (min-width: 1000px) {
   #feedContainer > div {
     width: calc(25% - var(--media-post-padding));
-  }
-}
-@media (min-width: 1200px) {
-  #feedContainer > div {
-    width: calc(20% - var(--media-post-padding));
   }
 }
 

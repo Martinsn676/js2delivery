@@ -29,7 +29,7 @@ async function apiCall(data,endPoint,method,endUrl) {
         data = data ? data : ""
         if(endPoint===searchEndpoint){
             if(data.length>0){
-                url+=data+"?"
+                url+=data+"&"
             }else{
                 url = baseUrl + postsEndpoint+"?"
             }
