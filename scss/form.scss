@@ -68,7 +68,7 @@
 .form-container button:hover {
   background-color: var(--button-color-hover);
 }
-#tags-list,.tags-container{
+.tags-list,.tags-container{
     display: flex;
     flex-wrap: wrap;
     li{

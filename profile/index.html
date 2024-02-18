@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/lazy.css">
     <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="../css/posts.css">
+    <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
     <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
@@ -20,10 +21,10 @@
     <script defer src="../js/menus.js"></script>
     <script defer src="../js/loadPosts.js"></script>
     <script defer src="../js/postForms.js"></script>
+    <script defer src="./profilePage.js"></script>
     <script defer>
       document.addEventListener("DOMContentLoaded", function() {
           postsObject.setUp();
-          postsObject.updatePosts();
           modalObject.setup()
       });
     </script>
@@ -37,41 +38,22 @@
   <!-- add the mobile form -->
 
   <div id="feed-contentdisable" class="flex-row">
-    <section id="sideMenu" class="fixed-top">
+    <section id="sideMenu" class="fixed-top col-4">
       <!-- add side menu -->
       <nav id="nav-menu" class="navbar"></nav>
       <!-- add post form under -->
       <form id="post-form" class="form-container col-12 flex-column"></form>
     </section>
-    <section class="col">
-      <!-- Top row filter -->
-      <div id="filter-menu" class="form-container flex-row flex-spread">
-        <!-- Search field -->
-        <div class="col-6 ">
-          <input id="searchField" type="text" class="form-control border-primary text-left rounded-1"
-            placeholder="Themes, feelings, places ... ">
-        </div>
-        <div class="col-4">
-          <select class="">
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="popularity">Popularity</option>
-          </select>
-        </div>
-      </div>
-      <!-- showing search results -->
-      <div id="searchResultContainer">
-
-      </div>
-      <!-- add modal -->
+    <div class="flex-column">
       <div id="modal" class="hide-modal">
         <div class="modal-display"></div>
-        <div class="modal-back-ground"></div>
+      <div class="modal-back-ground"></div>
       </div>
-      <!-- add posts to feed -->
+      <section id="profile-page" class="col">
+      </section>
       <div id="feedContainer" class="flex-row flex-wrap"></div>
-
-    </section>
+      </section>
+    </div>
   </div>
 <!-- Bottom menu for mobile -->
 <footer id="bottom-menu" class="fixed-bottom">

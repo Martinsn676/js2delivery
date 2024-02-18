@@ -1,6 +1,5 @@
 async function submitPostForm(event) {
     let testMode = false;
-    console.log('submit!')
     event.preventDefault();
     const formTarget = event.target;
 
@@ -27,7 +26,7 @@ async function submitPostForm(event) {
         let errorMessage = ""
 
         // is valid post
-        if(title){
+        if(body){
             data.title=title
             data.body=body
             data.tags=tagsObject.tags
@@ -36,17 +35,24 @@ async function submitPostForm(event) {
                 'alt':imageAlt,
             }
         }
-        if(formTarget.classList.contains('edit-mode')){
-            const response = await apiCall(data,postsEndpoint,putApi,id)
+        if(formTarget.classList.contains('comment')){
+            const response = await apiCall(data,postsEndpoint,postApi,`/${id}/comment`)
+            if(!response.ok){
+                errorMessage=await getErrorJson(response,'comment post')
+            }
+        }else if(formTarget.classList.contains('edit-mode')){
+            const response = await apiCall(data,postsEndpoint,putApi,"/"+id)
             if(response.ok){
-                addPosts()
+                postsObject.updatePosts()
+                formObject.clearForm()
             }else{
                 errorMessage=await getErrorJson(response,'edit post')
             }
         }else{
             const response = await apiCall(data,postsEndpoint,postApi)
             if(response.ok){
-                addPosts()
+                postsObject.updatePosts()
+                formObject.clearForm()
             }else{
                 errorMessage=await getErrorJson(response,'create post')
             }
@@ -54,9 +60,6 @@ async function submitPostForm(event) {
         if(errorMessage!=""){
             errorMessageText.innerText=errorMessage;
             errorMessageText.classList.remove('d-none')
-        }else{
-            formObject.clearForm()
-            addPosts()
         }
     }else{
         if(testMode){console.log("failed validation")}

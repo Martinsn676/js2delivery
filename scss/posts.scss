@@ -1,0 +1,190 @@
+/* Media post container */
+// Media post container
+.media-post-container{
+  padding:5px;
+  width: 100%;
+  &.expand .media-post{
+    height: auto;
+    .text-box{
+      height: auto;
+    }
+    .image-container{
+      height: auto;
+      overflow: visible;
+      .img{
+        width: 100%;
+      }
+    }
+    .blur{
+      display: none;
+    }
+  }
+  .media-post{
+    height: 440px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    padding: 5px;
+    @media only screen and (max-width:600px){ 
+      //height: auto;
+    }
+    .only-modal{
+      display: none;
+    }
+    .text-box{
+      font-size: 1rem;
+      height: 150px;
+      overflow: hidden;
+      margin-bottom: 0;
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+    }
+    .left-side{
+        width: 100%;
+    }
+    .blur {
+      background: linear-gradient(to top, white 0%, transparent 100%);
+      height: 60px;
+      width: 100%;
+      margin-top: -60px;
+    }
+    .image-container{
+        position: relative;
+        overflow: hidden;
+        height: 160px;
+        width: 100%;
+      img{
+        max-width: 100%;
+        height: auto;
+      }
+      .edit-button{
+        position: absolute;
+        right: 0;
+        top:0
+      }
+    }
+    .tags-container {
+      display: flex;
+      li {
+        background-color: var(--background-color);
+        color: white;
+        font-size: 14px;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+        border: 1px solid #0056b3; // Border color for tags
+      }
+    }
+  }
+
+//To handle post in mboile view and expanding
+  &.expand .media-post{
+    height: auto;
+    .text-box{
+      height: auto;
+    }
+    .image-container{
+      height: auto;
+      overflow: visible;
+      .img{
+        width: 100%;
+      }
+    }
+    .blur{
+      display: none;
+    }
+  }
+
+}
+/* ===== Modal ===== */
+
+#modal{
+  .modal-display {
+    z-index: 4;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: auto;
+
+    .rigth-side{
+        width: 300px;
+        padding: 10px;
+    }
+    .left-side{
+        width: 300px;
+    }
+    .post-comment{
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      .author{
+        font-size: 1.2rem;
+      }
+      .text{
+        padding-left: 5px;
+      }
+    }
+    .post-reactions{
+      &.active{
+        color: red;
+      }
+    }
+    .form-container{
+      margin-top: 10px;
+    }
+    .media-post-container{
+      padding: 0;
+      .media-post{
+        height: auto;
+        background-color: white;
+        border-radius: 20px;
+        .delete-comment-button{
+          cursor: pointer;
+          position: absolute;
+          right: 20px;
+          border: none;
+          color: red;
+          background-color: rgba($color: #000000, $alpha: 0);
+        }
+      }
+    }
+  }
+//To transfrom post into modal display
+.only-modal{
+    display: flex;
+}   
+&.hide-modal,.hide-modal{
+    display: none!important;
+}
+.text-box{
+    height: auto;
+    overflow: visible;
+}
+.blur{
+    display: none;
+}
+.image-container{
+    overflow: visible;
+    height: auto;
+}
+.modal-back-ground{
+    position: fixed;
+    top:0px;
+    left: 0px;
+    width:100vw;
+    height:100vh;
+    display: block;
+    background-color: grey;
+    opacity: 0.5;
+    z-index: 3;
+}
+} 
+
+

@@ -20,7 +20,6 @@ function saveLocal(name,content){
 function deleteLocal(name){
   localStorage.removeItem(name)
 }
-
 /**
  * Get local storage with name.
  * @param {string} name The name of the item to be retrieved from local storage.
@@ -58,4 +57,10 @@ function getUserName(){
 function signOut(){
     localStorage.clear()
     window.location.href = '../index.html'
+}
+
+function getUrlParam(findElement) {
+  let params = new URLSearchParams(window.location.search);
+  let param = params.get(findElement);
+  return param ? param : false;
 }

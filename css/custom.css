@@ -1,5 +1,5 @@
 :root {
-  --media-post-padding: 50px;
+  --media-post-padding: 10px;
 }
 
 #sideMenu {
@@ -54,7 +54,6 @@
   padding: 5px;
 }
 
-/* Form container */
 #sideMenu li {
   margin-bottom: 5px;
 }
@@ -62,6 +61,7 @@
 #top-section, #bottom-menu {
   background-color: white;
   width: 100vw;
+  z-index: 100;
 }
 #top-section ul, #bottom-menu ul {
   display: flex;
@@ -99,6 +99,8 @@
 
 #mobile-form {
   height: 100vh;
+  background-color: white;
+  padding: 20px;
 }
 #mobile-form.form-hidden {
   display: none;

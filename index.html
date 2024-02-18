@@ -12,11 +12,13 @@
     <script defer src="js/userForms.js"></script>
     <script defer src="js/apiCalls.js"></script>
     <script defer src="js/global.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 <main class="container">
-<div class="form-container col-6">
-    <form id="loginForm" class="form-container col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
+<div class="col-6">
+    <form id="loginForm" class="form-container col-12 needs-validation m-3" method="get" novalidate>
         <div class="m-3">
             <label for="email" class="form-label">E-mail</label>
             <input required type="text" class="form-control" id="emailInput" name="email" value="jenn32@stud.noroff.no">
@@ -33,11 +35,11 @@
         </div>
         <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
         </div>
-        <button class="btn btn-primary m-3" type="submit">Log in</button>
+        <button class="" type="submit">Log in</button>
     </form>
 
 
-    <form id="creatUserForm" class="form-container col-12 col-md-6 g-3 needs-validation m-3" method="get" novalidate>
+    <form id="creatUserForm" class="form-container col-12 needs-validation m-3" method="get" novalidate>
         <div class="m-3">
             <label for="userName" class="form-label">Username</label>
             <input required type="text" class="form-control" id="usernameInput" name="username" value="jenn32">
@@ -61,7 +63,7 @@
         </div>
         <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
         </div>
-        <button class="btn btn-primary m-3" type="submit">Crate User</button>
+        <button class="" type="submit">Crate User</button>
     </form>
 </div>
 </main>

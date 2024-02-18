@@ -14,7 +14,7 @@ const menu ={
         ['bi bi-person', 'Profile',noUrl,'button'],
         ['bi bi-bell', 'Notifications',noUrl,'button'],
         ['bi bi-gear', 'Settings',noUrl,'button'],
-        ['',`Logged in as ${getUserName()}`,noUrl,'mt-4',],
+        ['',`Logged in as ${getUserName()}`,'../profile/index.html','mt-4',],
         ['bi bi-box-arrow-in-left', 'Log out','signOut()','button'],
         
     ],
@@ -73,28 +73,37 @@ const menu ={
 }
 function toggleMobileForm(){
     document.getElementById('mobile-form').classList.toggle('form-hidden')
-
 }
 
 function addMenus (){
     document.getElementById('nav-menu').innerHTML =`<ul class="col list-unstyled hide-mb">${menu.addItems(menu.pcItems)}</ul>`
     document.getElementById('bottom-menu').innerHTML = `<ul class="justify-content-between hide-pc">${menu.addItems(menu.bottomItems)}</ul>`
-    document.getElementById('top-section').innerHTML=`<ul class="justify-content-between hide-pc">${menu.addItems(menu.topItems)}</ul>`
+    document.getElementById('top-section').innerHTML=`
+        <ul class="justify-content-between hide-pc">
+            ${menu.addItems(menu.topItems)}
+        </ul>
+        <form id="mobile-form" class="form-container form-hidden">
+            ${formObject.postTemplate}
+        </form>`
 
     //Add mobile form
-    document.getElementById('mobile-form').innerHTML=mobileForm()
+    document.getElementById('mobile-form').innerHTML=formObject.postTemplate
 
     //Add search functions
     const searchField = document.querySelector('#searchField');
-    searchField.addEventListener('keyup', (event) => {
-        if (event.key === 'Enter') {
-            // Execute your search logic here
-            console.log('Search query:', event.target.value);
-            addPosts(event.target.value)
-        }
-    });
+    if(searchField){
+        searchField.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                // Execute your search logic here
+                console.log('Search query:', event.target.value);
+                postsObject.updatePosts(event.target.value)
+            }
+        });
 
-    document.getElementById('post-form').innerHTML=formObject.pcTemplate
+    }
+
+
+    document.getElementById('post-form').innerHTML=formObject.postTemplate
     formObject.container = document.getElementById('post-form')
     formObject.templateFunctions()
     
@@ -102,9 +111,8 @@ function addMenus (){
     document.getElementById('imageUrlInput').addEventListener('change',()=>formObject.updateImagePreview())
     
 
-    tagsObject.target = document.querySelector('#sideMenu #tags-list')
-    const inputField = document.querySelector('#sideMenu #tagInput')
-    tagsObject.inputField = inputField
+    tagsObject.tagsLists = document.querySelectorAll('.tags-list')
+    tagsObject.tagInputs = document.querySelectorAll('.tagInput')
 }
 const tagsObject = {
     'tags':[],
@@ -131,29 +139,29 @@ const tagsObject = {
         this.tags.forEach(tag=>{
                html+=`<li>${tag}</li>`
         })
-        this.target.innerHTML=html
-        allTags = this.target.querySelectorAll('li')
-        allTags.forEach(tag=>{
-            tag.addEventListener('click',(target)=>{
-                console.log(target.explicitOriginalTarget.innerText)
-                this.toggleTag(target.explicitOriginalTarget.innerText)
+        this.tagsLists.forEach((list)=>{
+            list.innerHTML=html
+            allTags = list.querySelectorAll('li')
+            allTags.forEach(tag=>{
+                tag.addEventListener('click',(target)=>{
+                    toggleTag(target.explicitOriginalTarget.innerText)
+                });
             });
-        });
-    },
-    // addTagsFunctions(){
-    //     const tagsInputGroup = document.getElementById('tags-input-group')
-    //     const inputField = tagsInputGroup.querySelector('input')
-    //     const tagsbutton = tagsInputGroup.querySelector('button')
-    //     tagsbutton.addEventListener('click',()=>{
-    //         this.toggleTag(inputField.value)
-    //         inputField.value=""
-    //     })
-    // }
-}
-function toggleTag(){
-event.preventDefault()
+        })
 
-    tagsObject.toggleTag(tagsObject.inputField.value)
+    },
+}
+function toggleTag(tag){
+    event.preventDefault()
+    let value = ""
+    if(tag){
+        value = tag
+    }else{
+        const inputField = event.target.parentElement.querySelector('#tagInput')
+        value = inputField.value
+        inputField.value=""
+    }
+    tagsObject.toggleTag(value)
 }
 const formObject = {
     activateForm(type){
@@ -169,7 +177,6 @@ const formObject = {
         inputs.forEach(input => {
             input.value=""
         });
-        console.log("cear for ")
         tagsObject.tags=[]
         tagsObject.update()
         this.clearWarning()
@@ -200,14 +207,32 @@ const formObject = {
             }
         }
     },
+    editThis(post) {
+        const { media, id, title, body, tags } = post
+
+        const imageUrlInput = formObject.container.querySelector('#imageUrlInput');
+        const titleInput = formObject.container.querySelector('#titleInput');
+        const textInput = formObject.container.querySelector('#textInput');
+        const postID = formObject.container.querySelector('#postID')
+
+        imageUrlInput.value = media.url;
+        titleInput.value = title;
+        textInput.value = body;
+        postID.value = id;
+
+        tagsObject.tags=tags
+        tagsObject.update()
+        this.activateForm('edit')
+        this.updateImagePreview()
+    },
     templateFunctions(){
         this.container.querySelector('#cancel-button').addEventListener('click',()=>{
             event.preventDefault()
             this.clearForm()
         })
-        this.container.querySelector('#delete-button').addEventListener("click", () => deleteThis());
+        this.container.querySelector('#delete-button').addEventListener("click", () => postsObject.deletePost());
     },
-    'pcTemplate':`
+    'postTemplate':`
         <img id="imagePreview" src="" class="col-12">
         <input 
             type="text" 
@@ -247,10 +272,10 @@ const formObject = {
 
         <div id="tags-input-group" class="input-group">
             <input type="text" class="clearable" id="tagInput" placeholder="Add tags" aria-label="Add tags" aria-describedby="add-tags">
-            <button class="" onclick="toggleTag()" type="button" id="add-tags">Add</button>
+            <button class="add-tags" onclick="toggleTag()" type="button">Add</button>
         </div>
 
-        <ul id="tags-list" class="list-unstyled col-12"></ul>
+        <ul class="tags-list list-unstyled col-12"></ul>
         <div class="buttons col-12 row">
             <div class="button-container only-post-mode col-6">
                 <button type="submit" class="btn btn-primary">Post</button>
@@ -274,70 +299,3 @@ const formObject = {
 
 
 addMenus()
-function mobileForm(){
-    return `
-        <form id="mobile-form" class="col-12">
-
-        <img id="imagePreview" src="" class="col-12">
-        <input 
-            type="text" 
-            class="d-none clearable" 
-            id="postID" 
-            name="postID" 
-            value=""
-        />
-
-        <label for="imageUrl" class="form-label">Image url</label>
-        <input required 
-            type="text" 
-            class="form-control clearable" 
-            id="imageUrlInput" 
-            name="imageUrl" 
-            value=""
-        />
-
-        <label for="title" class="form-label">Title</label>
-        <input required 
-            type="text" 
-            class="form-control clearable" 
-            id="titleInput" 
-            name="title" 
-            value=""
-        />
-
-        <label for="text" class="form-label">Text</label>
-        <textarea 
-            id="textInput" 
-            name="text" 
-            class="mb-2 
-            form-control clearable border-primary" 
-            rows="2" 
-            placeholder="Description"
-        ></textarea>
-
-        <div id="tags-input-group" class="input-group mb-3">
-            <input type="text" class="form-control clearable" id="tagInput" placeholder="Add tags" aria-label="Add tags" aria-describedby="add-tags">
-            <button class="btn btn-outline-secondary" type="button" id="add-tags">Add</button>
-        </div>
-        <ul id="tags-list" class="list-unstyled col-12"></ul>
-        <div class="buttons col-12 row">
-            <div class="button-container only-post-mode col-6">
-                <button type="submit" class="btn btn-primary">Post</button>
-            </div>
-            <div class="button-container only-edit-mode col-6">
-                <button type="submit" class="btn btn-primary">Edit post</button>
-            </div>
-            <div class="button-container only-edit-mode col-6">
-                <button id="delete-button" type="button" class="btn btn-primary" class="btn btn-primary">Delete</button>
-            </div>
-            <div class="button-container only-edit-mode col-6">
-                <button id="cancel-button" type="button" class="btn btn-primary" class="btn btn-primary">Cancel</button>
-            </div>
-
-            <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
-            </div>
-        </div>
-    </form>
-
-    `
-}

@@ -2,7 +2,7 @@
 
 // Define CSS variables
 :root {
-  --media-post-padding: 50px;
+  --media-post-padding: 10px;
 }
 
 // Use the CSS variables within SCSS
@@ -17,7 +17,6 @@
   // Apply a media query using the CSS variable
   @media (max-width: 500px) {
     display: none;
-
   }
 }
 #feedContainer > div {
@@ -56,26 +55,15 @@
         }
     }
 }
-/* Form container */
-// .form-container {
-//   max-width: 400px;
-//   margin: 0 auto;
-//   padding: 20px;
-//   border: 1px solid #ccc;
-//   border-radius: 5px;
-//   background-color: #f9f9f9;
-// }
-
-
 #sideMenu{
     li{
         margin-bottom: 5px;
     }
 }
-
 #top-section,#bottom-menu{
     background-color: white;
     width: 100vw;
+    z-index: 100;
     ul{
         display: flex;
         flex-direction: row;
@@ -94,6 +82,7 @@
     position: fixed;
     top: 0;
     left: 0;
+
     ul{
         margin-top: 0;
         margin-bottom: 0;
@@ -117,6 +106,8 @@
 
 #mobile-form{
     height: 100vh;
+    background-color: white;
+    padding: 20px;
     &.form-hidden{
         display: none;
     }

@@ -3,6 +3,7 @@ const logInEndPoint = '/auth/login'
 const createEndpoint  = '/auth/register'
 const getApiKeyEndpoint = '/auth/create-api-key'
 const postsEndpoint = '/social/posts'
+const profileEndPoint = '/social/profiles'
 const searchEndpoint = '/social/posts/search?q='
 const getApi = 'GET'
 const postApi = 'POST'
@@ -16,29 +17,30 @@ const putApi = 'PUT'
  * @returns {response}
  */
 async function apiCall(data,endPoint,method,endUrl) {
-    let url = baseUrl + endPoint;
-    method = method ? method : "GET"
-    data = data ? data : ""
-    if(endPoint===searchEndpoint){
-        if(data.length>0){
-            url+=data
-        }else{
-            url = baseUrl + postsEndpoint
+    const postData = {}
+    let url = ""
+    if(data==="testMode"){
+        console.log("Api test mode")
+        url = endPoint
+        postData.method=method
+    }else{
+        url = baseUrl + endPoint;
+        method = method ? method : "GET"
+        data = data ? data : ""
+        if(endPoint===searchEndpoint){
+            if(data.length>0){
+                url+=data+"?"
+            }else{
+                url = baseUrl + postsEndpoint+"?"
+            }
         }
-    }
-    console.log(endUrl)
-    if(endUrl){
-        if(typeof endUrl === 'number'){
-            url+="/"+endUrl
-        }else if(typeof endUrl === 'string')
-            url+="?"+endUrl
-    }
-    const postData = {
-        method: method,
-    };
-    //Send body if object provided
-    if(typeof data === 'object'){
-        postData.body = JSON.stringify(data);
+
+        url = endUrl ? url + endUrl : url
+        postData.method = method
+        //Send body if object provided
+        if(typeof data === 'object'){
+            postData.body = JSON.stringify(data);
+        }
     }
     let accesstoken = await getLocal('accesstoken')
     accesstoken = accesstoken ? `Bearer ${accesstoken}`: "";
@@ -49,6 +51,7 @@ async function apiCall(data,endPoint,method,endUrl) {
         'Authorization': accesstoken,
         "X-Noroff-API-Key": apiKey,
         };
+    console.log(url,postData)
     response = await fetchApi(url, postData)
     return response
 }
