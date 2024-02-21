@@ -16,20 +16,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="manifest" href="/favicon/site.webmanifest">
-    <script src="../js/apiCalls.js"></script>
-    <script src="../js/global.js"></script>
-    <script defer src="../js/menus.js"></script>
-    <script defer src="../js/loadPosts.js"></script>
-    <script defer src="../js/postForms.js"></script>
-    <script defer src="./allprofilePage.js"></script>P
-    <script defer>
-      document.addEventListener("DOMContentLoaded", function() {
-console.log(allProfiles)
-        modalObject.setup();
-        allProfiles.setup();
-        allProfiles.addProfiles()
-      });
-    </script>
+    <script type="module" defer src="./allProfiles.mjs"></script>
+
 </head>
 
 <body class="text-bg-light">
@@ -40,9 +28,11 @@ console.log(allProfiles)
   <!-- add the mobile form -->
 
   <div id="feed-contentdisable" class="flex-row">
-    <section id="sideMenu" class="fixed-top col-4">
+    <section id="sideMenu" class="fixed-top">
       <!-- add side menu -->
       <nav id="nav-menu" class="navbar"></nav>
+      <!-- Image prview -->
+      <img id="imagePreview" src="" class="col-12">
       <!-- add post form under -->
       <form id="post-form" class="form-container col-12 flex-column"></form>
     </section>

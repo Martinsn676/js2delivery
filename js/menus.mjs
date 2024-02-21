@@ -1,3 +1,7 @@
+import { getUserName } from "./global.mjs"
+import { submitPostForm } from "./postForms.mjs"
+
+
 const onlyPc = "nav-item d-none d-sm-inline"
 const onlyMb = "d-sm-none d-inline"
 const size = 'fs-5'
@@ -6,8 +10,8 @@ const currentPath = window.location.pathname.toLowerCase();
 
 const menu ={
     'pcItems':[
-        ['<div class="main-logo"><img src="../files/logoWide.png"></div>','',noUrl,'col-6'],
-        [`bi bi-house`,'Home','../index.html','button'],
+        ['<div class="main-logo"><img src="../files/logoWide.png"></div>','','','col-6'],
+        [`bi bi-house`,'Home','../feed/index.html','button'],
         ['bi bi-instagram', 'Explore','../feed/index.html','button'],
         ['bi bi-play-circle', 'Videos',noUrl,'button'],
         ['bi bi-chat', 'Messages',noUrl,'button'],
@@ -18,12 +22,13 @@ const menu ={
         ['bi bi-box-arrow-in-left', 'Log out','signOut()','button'],
         
     ],
+    //text left to be used as helping tool or something
     'bottomItems':[
         [`bi bi-house`,'Home','../index.html'],
         ['bi bi-instagram', 'Explore','../feed/index.html'],
         ['bi bi-play-circle', 'Videos',noUrl],
         ['bi bi-chat', 'Messages',noUrl],
-        ['bi bi-plus-circle', 'Add post','toggleMobileForm()'],
+        ['bi bi-plus-circle', 'Add post',noUrl,'toggle-post-button'],
     ],
     'topItems':[
         ['bi bi-search', 'Explore','search()'],
@@ -71,11 +76,11 @@ const menu ={
             </li>`;
     },
 }
-function toggleMobileForm(){
+export function toggleMobileForm(){
     document.getElementById('mobile-form').classList.toggle('form-hidden')
 }
 
-function addMenus (){
+export function addMenus (){
     document.getElementById('nav-menu').innerHTML =`<ul class="col list-unstyled hide-mb">${menu.addItems(menu.pcItems)}</ul>`
     document.getElementById('bottom-menu').innerHTML = `<ul class="justify-content-between hide-pc">${menu.addItems(menu.bottomItems)}</ul>`
     document.getElementById('top-section').innerHTML=`
@@ -108,15 +113,17 @@ function addMenus (){
     formObject.templateFunctions()
     
     formObject.container.addEventListener('submit', (event) => submitPostForm(event));
-    imageInput = document.querySelector('#sideMenu #imageUrlInput')
+    const imageInput = document.querySelector('#sideMenu #imageUrlInput')
     console.log(imageInput)
     imageInput.addEventListener('change',()=>formObject.updateImagePreview(event))
-    
-
+    const toggleFormbutton = document.querySelector('#bottom-menu .toggle-post-button')
+    toggleFormbutton.addEventListener('click',()=>toggleMobileForm())
+    tagsObject.addTagsButton = document.querySelector("#sideMenu #add-tags")
     tagsObject.tagsLists = document.querySelectorAll('.tags-list')
     tagsObject.tagInputs = document.querySelectorAll('.tagInput')
+    tagsObject.addTagsButton.addEventListener('click',()=>tagsObject.addTag())
 }
-const tagsObject = {
+export const tagsObject = {
     'tags':[],
     //Check if already excist and removce if it does
     toggleTag(text){
@@ -143,29 +150,30 @@ const tagsObject = {
         })
         this.tagsLists.forEach((list)=>{
             list.innerHTML=html
-            allTags = list.querySelectorAll('li')
+            const allTags = list.querySelectorAll('li')
             allTags.forEach(tag=>{
                 tag.addEventListener('click',(target)=>{
-                    toggleTag(target.explicitOriginalTarget.innerText)
+                    this.toggleTag(target.explicitOriginalTarget.innerText)
                 });
             });
         })
 
     },
-}
-function toggleTag(tag){
-    event.preventDefault()
-    let value = ""
-    if(tag){
-        value = tag
-    }else{
-        const inputField = event.target.parentElement.querySelector('#tagInput')
-        value = inputField.value
-        inputField.value=""
+    addTag(tag){
+        event.preventDefault()
+        let value = ""
+        if(tag){
+            value = tag
+        }else{
+            const inputField = event.target.parentElement.querySelector('#tagInput')
+            value = inputField.value
+            inputField.value=""
+        }
+        tagsObject.toggleTag(value)
     }
-    tagsObject.toggleTag(value)
 }
-const formObject = {
+
+export const formObject = {
     activateForm(type){
         if(type==='edit'){
             this.container.classList.add('edit-mode')
@@ -192,7 +200,7 @@ const formObject = {
     },
     updateImagePreview(event){
         const value = document.querySelector('#sideMenu #imageUrlInput').value
-        url = value ? value :""
+        const url = value ? value :""
         const imagePreview = document.querySelector('#sideMenu #imagePreview')
         const dummyImage = new Image();
         if(url===""){
@@ -226,6 +234,8 @@ const formObject = {
         tagsObject.update()
         this.activateForm('edit')
         this.updateImagePreview()
+        const imagePreview = document.querySelector('#sideMenu #imagePreview')
+        imagePreview.scrollIntoView({ behavior: 'smooth' }); // Smooth scrolling
     },
     templateFunctions(){
         this.container.querySelector('#cancel-button').addEventListener('click',()=>{
@@ -274,7 +284,7 @@ const formObject = {
 
         <div id="tags-input-group" class="input-group">
             <input type="text" class="clearable" id="tagInput" placeholder="Add tags" aria-label="Add tags" aria-describedby="add-tags">
-            <button class="add-tags" onclick="toggleTag()" type="button">Add</button>
+            <button id="add-tags" class="add-tags" type="button">Add</button>
         </div>
 
         <ul class="tags-list list-unstyled col-12"></ul>

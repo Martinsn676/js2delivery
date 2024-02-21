@@ -27,6 +27,7 @@
   margin-bottom: 20px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   padding: 5px;
+  cursor: pointer;
 }
 .media-post-container .media-post .only-modal {
   display: none;

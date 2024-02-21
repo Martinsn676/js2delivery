@@ -1,13 +1,19 @@
+import { api } from "../js/apiCalls.mjs";
+import { postsObject } from "../js/loadPosts.mjs";
 
-console.log("asd")
 
+document.addEventListener("DOMContentLoaded", function() {
+    postsObject.setUp();
+    allProfiles.setup();
+    allProfiles.addProfiles()
+});
 
-const allProfiles = {
+export const allProfiles = {
     setup() {
         this.container = document.getElementById('all-profiles-container');
     },
     async addProfiles(){
-        const respons = await apiCall('',profileEndPoint,getApi)
+        const respons = await api.call('',api.profileEndPoint,api.getApi)
         const json = await respons.json()
         this.createHTML(json.data)
     },

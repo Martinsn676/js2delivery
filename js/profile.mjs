@@ -1,23 +1,25 @@
+import { postsObject,modalObject } from "../js/loadPosts.mjs";
+import { getUrlParam,getUserName } from "../js/global.mjs";
+import { api } from "../js/apiCalls.mjs";
 
-const profile = {
+
+console.trace()
+export const profileInfo = {
     'profilePage':document.getElementById('profile-page'),
     'userName':'',
     'userData':[],
     async setup(){
         this.userName = getUrlParam('user') ? getUrlParam('user') : getUserName()
-        const respons = await apiCall('',profileEndPoint,getApi,'/'+this.userName)
+        const respons = await api.call('',api.profileEndPoint,api.getApi,'/'+this.userName)
         const json = await respons.json()    
         this.userData = json.data
         this.loggedInUser = getUserName()
-        console.log("userName",this.userName)
-    console.log(getUrlParam('user'))
-        console.log(" this.userData", this.userData)
         this.profilePage.innerHTML=this.template(this.userData)
-        const postRespons = await apiCall('',profileEndPoint+"/"+this.userName+"/posts"+"?",getApi, postsObject.settings.endApi)
+        const postRespons = await api.call('',api.profileEndPoint+"/"+this.userName+"/posts"+"?",api.getApi, postsObject.settings.endApi)
         const jsonPosts = await postRespons.json()
 
         postsObject.addPosts(jsonPosts.data)     
-        profile.addFunctions()
+        this.addFunctions()
     },
     template({avatar,banner,bio,email,name}){
         return `
@@ -62,15 +64,15 @@ const profile = {
         }
 
     },
-    editImage(editing){
+    async editImage(editing){
         modalObject.modalDisplay.innerHTML=this.changeImageForm()
         modalObject.show()
         const submitButton = modalObject.modalDisplay.querySelector('button')
         submitButton.addEventListener('click',async ()=>{
             event.preventDefault()
-            newUrl = modalObject.modalDisplay.querySelector('input').value
+            const newUrl = modalObject.modalDisplay.querySelector('input').value
             if(newUrl!=""){
-                body={}
+                const body={}
                 if(editing==='profile'){
                     body.avatar={
                             "url": newUrl,
@@ -85,7 +87,16 @@ const profile = {
                     return
                 }
 
-                await apiCall(body,profileEndPoint,putApi,'/'+this.userName)
+                const response = await api.call(body,api.profileEndPoint,api.putApi,'/'+this.userName)
+                console.log("response",response)
+               
+                if(!response.ok){
+                    let errorMessage = await api.getErrorJson(response,'update profile images')
+                    const errorBox = modalObject.modalDisplay.querySelector('#error-box')
+                    errorBox.innerText=errorMessage
+                }else{
+                    modalObject.hide()
+                }
             }
         })
     },
@@ -101,9 +112,9 @@ const profile = {
                     value=""
                 />
                 <button type="submit">Change image</button>
+                <div id="error-box" class="invalid-feedback"></div>
             </form>
         `
     }
 
 }
-profile.setup()

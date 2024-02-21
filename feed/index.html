@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log in page</title>
-    <link rel="stylesheet" href="../css/custom.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/lazy.css">
-    <link rel="stylesheet" href="../css/form.css">
-    <link rel="stylesheet" href="../css/posts.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
-    <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/favicon/site.webmanifest">
-    <script src="../js/apiCalls.js"></script>
-    <script src="../js/global.js"></script>
-    <script defer src="../js/menus.js"></script>
-    <script defer src="../js/loadPosts.js"></script>
-    <script defer src="../js/postForms.js"></script>
-    <script defer>
-      document.addEventListener("DOMContentLoaded", function() {
-          postsObject.setUp();
-          postsObject.updatePosts();
-          modalObject.setup()
-      });
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in page</title>
+  <link rel="stylesheet" href="../css/custom.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/lazy.css">
+  <link rel="stylesheet" href="../css/form.css">
+  <link rel="stylesheet" href="../css/posts.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+  <script type="module" src="../js/apiCalls.mjs"></script>
+  <script type="module" src="../js/global.mjs"></script>
+  <script type="module" defer src="./module.mjs"></script>
 </head>
 
 <body class="text-bg-light">
@@ -45,13 +36,14 @@
       <!-- add post form under -->
       <form id="post-form" class="form-container col-12 flex-column"></form>
     </section>
-    <section class="col">
+    <section class="col flex-column">
       <!-- Top row filter -->
       <div id="filter-menu" class="form-container flex-row flex-spread">
         <!-- Search field -->
         <div class="col-6 ">
           <input id="searchField" type="text" class="form-control border-primary text-left rounded-1"
             placeholder="Themes, feelings, places ... ">
+        </input>
         </div>
         <div class="col-4">
           <select class="">
@@ -62,17 +54,14 @@
         </div>
       </div>
       <!-- showing search results -->
-      <div id="searchResultContainer">
-
-      </div>
+      <div id="searchResultContainer"></div>
+      <!-- add posts to feed -->
+      <div id="feedContainer" class="flex-row flex-wrap"></div>
       <!-- add modal -->
       <div id="modal" class="hide-modal">
         <div class="modal-display"></div>
         <div class="modal-back-ground"></div>
       </div>
-      <!-- add posts to feed -->
-      <div id="feedContainer" class="flex-row flex-wrap"></div>
-
     </section>
   </div>
 <!-- Bottom menu for mobile -->

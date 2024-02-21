@@ -1,4 +1,8 @@
-async function submitPostForm(event) {
+
+import { formObject,tagsObject } from "./menus.mjs";
+import { api } from "./apiCalls.mjs";
+
+export async function submitPostForm(event) {
     let testMode = false;
     event.preventDefault();
     const formTarget = event.target;
@@ -36,25 +40,25 @@ async function submitPostForm(event) {
             }
         }
         if(formTarget.classList.contains('comment')){
-            const response = await apiCall(data,postsEndpoint,postApi,`/${id}/comment`)
+            const response = await api.call(data,api.postsEndpoint,api.postApi,`/${id}/comment`)
             if(!response.ok){
-                errorMessage=await getErrorJson(response,'comment post')
+                errorMessage=await api.getErrorJson(response,'comment post')
             }
         }else if(formTarget.classList.contains('edit-mode')){
-            const response = await apiCall(data,postsEndpoint,putApi,"/"+id)
+            const response = await api.call(data,api.postsEndpoint,api.putApi,"/"+id)
             if(response.ok){
                 postsObject.updatePosts()
                 formObject.clearForm()
             }else{
-                errorMessage=await getErrorJson(response,'edit post')
+                errorMessage=await api.getErrorJson(response,'edit post')
             }
         }else{
-            const response = await apiCall(data,postsEndpoint,postApi)
+            const response = await api.call(data,api.postsEndpoint,api.postApi)
             if(response.ok){
                 postsObject.updatePosts()
                 formObject.clearForm()
             }else{
-                errorMessage=await getErrorJson(response,'create post')
+                errorMessage=await api.getErrorJson(response,'create post')
             }
         }
         if(errorMessage!=""){

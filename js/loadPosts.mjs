@@ -1,3 +1,9 @@
+import { getUserName,getUrlParam,cleanDate  } from "./global.mjs"
+import { api } from "./apiCalls.mjs"
+import { submitPostForm } from "./postForms.mjs"
+import { formObject } from "./menus.mjs"
+import { profileInfo } from "./profile.mjs"
+
 // Render the posts and replace the old ones
 /**
  * //Get posts from api call and render them
@@ -8,7 +14,7 @@
  *  const postsArray = apiResponse.data
  * ```
  */
-const modalObject = {
+export const modalObject = {
     //Variables used, but set later
     'modalContainer':"",
     'modalBackground':"",
@@ -32,7 +38,7 @@ const modalObject = {
         this.modalContainer.classList.add('hide-modal')
     }
 }
-const postsObject = {
+export const postsObject = {
     'settings':{
         'endApi':'_author=true&_comments=true&_reactions=true'
     },
@@ -51,7 +57,7 @@ const postsObject = {
         const urlFilter = getUrlParam('tag')
         filter = urlFilter ? `&_tag=${urlFilter}` : filter
         let searchResult = "Showing all posts"
-        const response = await apiCall(search, searchEndpoint, getApi, this.settings.endApi+filter);
+        const response = await api.call(search, api.searchEndpoint, api.getApi, this.settings.endApi+filter);
         const json = await response.json();
         const postsArray = json.data
         this.addPosts(postsArray)
@@ -61,21 +67,36 @@ const postsObject = {
             <div>
                 Showing search result for "${search}"
             </div>
-            <a href="/feed/index.html">
-                Reset
-            </a>`
-        }
-        if(filter!=""){
+            <button id="reset-button">Reset</button>`
+        }else if(filter!=""){
             const splitFilter = filter.split('=');
             searchResult="<div>Showing posts with the tag: "+splitFilter[1]+"</div>"
-        searchResult+=`<a href="/feed/index.html">Reset</a>`
+            searchResult+=`<button id="reset-button">Reset</button>`
         }
         if(searchResultContainer){
             searchResultContainer.innerHTML=searchResult
-            urlID = getUrlParam('id')
-            if(urlID!=false){
-                this.displayPost(urlID)
+            const resetButton = searchResultContainer.querySelector('#reset-button')
+            const inProfilePage = window.location.pathname.endsWith("/profile/index.html");
+            if(resetButton){
+            resetButton.addEventListener('click',()=>{
+                if(inProfilePage){
+                    const userParam = profileInfo.userData.name
+                    const user = userParam ? "?user="+userParam : ""
+                    window.location.href="./index.html"+user
+                }else{
+                    const urlID = getUrlParam('id')
+                    const id = urlID ? "?id="+urlID : ""
+                    window.location.href="./index.html"+id
+                    if(urlID!=false){
+                        this.displayPost(urlID)
+                    }
+                }
+                
+            })
             }
+
+
+            
         }
     },
     async addPosts(postsArray){
@@ -141,36 +162,35 @@ const postsObject = {
                     html += `
     <div id="post-${id}" class="media-post-container">
         <div class="media-post flex-row">
-            <div class="flex-column left-side">
+            <div class="flex-column left-side flex-spread">
                 <div class="text-box">
                     <a href="/profile/index.html?user=${author.name}">${author.name}</a>
                     <h3 class="title">${title}</h3>
+                    <span>${cleanDate(created)}${editText}</span>
                     <p class="fs-6 text">${body}</p>
                 </div>
                 <div class="blur"></div>
+                
                 <div class="image-container mt-2 mb-2 flex-column align">
                     <img class="img" src='${url}'>
                     ${editButton}
                 </div>
-                <span>${cleanDate(created)}${editText}</span>
+                <div class="col-12 flex-column">
+                    ${reactiosnHtml}
+                </div>
+                
                 <ul class="tags-container list-unstyled">${tagHtml}</ul>
+
                 <div class="flex-row flex-spread">
                     <div class="hide-modal">
                         <i class="bi bi-chat-left"></i>
                         <span>${_count.comments}</span>
                     </div>      
-                    <div class="hide-modal">
-                        <i class="bi bi-heart"></i>
-                        <span>${_count.reactions}</span>
-                    </div>
                 </div>
             </div>
             <div class="flex-column rigth-side only-modal">
                 <div class=" col-12 flex-column">
                     ${commentHtml}
-                </div>
-                <div class="col-12 flex-column">
-                    ${reactiosnHtml}
                 </div>
                 <form class="form-container col-12 flex-column comment">
                     <input 
@@ -288,7 +308,7 @@ const postsObject = {
             //Add listener to like button
             // const heartIcon = modalObject.modalContainer.querySelector('#heartIcon')
             // heartIcon.addEventListener('click',async ()=>{
-            //     const response = await apiCall('',postsEndpoint,putApi,`/${findID}/react/👍`)
+            //     const response = await api.call('',postsEndpoint,putApi,`/${findID}/react/👍`)
             //     console.log(findID)
             //         if(response.ok){
             //             await this.updatePosts()
@@ -303,12 +323,12 @@ const postsObject = {
             deletableComments.forEach((comment)=>{
                 comment.addEventListener('click',async (event)=>{
                     const IDs = event.target.id.split('-');
-                    const response = await apiCall('',postsEndpoint,deleteApi,`/${IDs[1]}/comment/${IDs[2]}`)
+                    const response = await api.call('',api.postsEndpoint,api.deleteApi,`/${IDs[1]}/comment/${IDs[2]}`)
                     if(response.ok){
                         await this.updatePosts()
                         this.displayPost(Number(IDs[1]))
                     }else{
-                        errorMessage=await getErrorJson(response,'delete comment')
+                        errorMessage=await api.getErrorJson(response,'delete comment')
                     }
                 })
             })
@@ -330,13 +350,13 @@ const postsObject = {
     },
     async deletePost(id){
         id = id ? id : Number(formObject.container.querySelector('#postID').value)
-        const response = await apiCall("",postsEndpoint,deleteApi,"/"+id)
+        const response = await api.call("",postsEndpoint,deleteApi,"/"+id)
         if(response.ok){
             window.history.pushState({}, '', 'index.html');
             this.updatePosts()
             formObject.clearForm()
         }else{
-            getErrorJson(response,'delete post')
+            api.getErrorJson(response,'delete post')
         }
     },
 }

@@ -1,5 +1,7 @@
-const allUserForms = document.querySelectorAll('form')
+import { api } from "./apiCalls.mjs";
+import { local } from "./global.mjs";
 
+const allUserForms = document.querySelectorAll('form')
 allUserForms.forEach(form => {
   form.addEventListener('submit', (event) => submitForm(event));
 });
@@ -38,7 +40,7 @@ async function submitForm(event) {
             data.password=password
             
             if(formID==='creatUserForm'){
-                const response = await apiCall(data,createEndpoint,postApi)
+                const response = await api.call(data,api.createEndpoint,api.postApi)
                 const json = await response.json()
                 if(response.status===201){
                     loginNow=true
@@ -48,15 +50,15 @@ async function submitForm(event) {
                 }
             }
             if(formID==='loginForm' || loginNow){
-                const response = await apiCall(data,logInEndPoint,postApi)
+                const response = await api.call(data,api.logInEndPoint,api.postApi)
                 const json = await response.json()
                 if(response.status===200){
                     console.log(json)
-                    saveLocal('accesstoken',json.data.accessToken)
-                    saveLocal('userName',json.data.name)
-                    const keyResponse = await apiCall(data,getApiKeyEndpoint,postApi)
+                    local.save('accesstoken',json.data.accessToken)
+                    local.save('userName',json.data.name)
+                    const keyResponse = await api.call(data,api.getApiKeyEndpoint,api.postApi)
                     const jsonKeyRepsonse = await keyResponse.json()
-                    saveLocal('apiKey',jsonKeyRepsonse.data.key)
+                    local.save('apiKey',jsonKeyRepsonse.data.key)
                     window.location.href = '../feed/index.html'
                 }else{
                     errorMessage=json.errors[0].message
