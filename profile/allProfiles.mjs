@@ -3,6 +3,7 @@ import { postsObject } from "../js/loadPosts.mjs";
 
 
 document.addEventListener("DOMContentLoaded", function() {
+    
     postsObject.setUp();
     allProfiles.setup();
     allProfiles.addProfiles()

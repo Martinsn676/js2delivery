@@ -1,6 +1,8 @@
 
 import { formObject,tagsObject } from "./menus.mjs";
 import { api } from "./apiCalls.mjs";
+import { postsObject } from "./loadPosts.mjs";
+
 
 export async function submitPostForm(event) {
     let testMode = false;

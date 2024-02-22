@@ -62,7 +62,7 @@
   max-width: 100%;
   height: auto;
 }
-.media-post-container .media-post .image-container .edit-button {
+.media-post-container .media-post .image-container #edit-post-nav {
   position: absolute;
   right: 0;
   top: 0;

@@ -107,27 +107,42 @@ export const postsObject = {
         this.postsArray=postsArray
         this.addFunctions(postsArray)
     },
+    checkBlackList(media){
+        if(!media || media.url.startsWith('https://unsplash.com') || media.url.startsWith('https://ibb')){
+            return false
+        }
+        return true
+    },
     async createHtml(postsArray){
         let html = ""
         postsArray.forEach((post) => {
             if(post){
+                const { _count,title,body,created, updated, media, tags, author,id,comments,reactions } = post;
                 let editText = "";
                 let tagHtml = "";
                 let editButton = "";
                 let commentHtml = ""
                 let reactiosnHtml =""
-                const { _count,title,body,created, updated, media, tags, author,id,comments,reactions } = post;
+                let authorString = author.name
+                
                 if (created != updated) {
                     editText = ' (edited)';
                 }
                 if (tags) {
                     tags.forEach(tag => {
+                        if(tag.length>0){
                         tagHtml += `<li class="tag">${tag}</li>`;
+
+                        }
                     });
                 }
                 if (this.user === author.name) {
-                    editButton = `                   
-                        <button id="edit-button-${id}" class="only-expanded edit-button icon-button"><i class="bi bi-pencil-fill"></i></button>
+                    authorString="You"
+                    editButton = ` 
+                        <div id="edit-post-nav" class="only-modal">                  
+                            <button id="edit-post-button-${id}" class="only-expanded edit-button icon-button m-1"><i class="bi bi-pencil-fill"></i></button>
+                            <button id="delete-post-button-${id}" class="only-expanded delete-button icon-button m-1"><i class="bi bi-trash-fill"></i></button>
+                        </div>
                     `
                 }
                 if(comments[0]){
@@ -158,13 +173,15 @@ export const postsObject = {
                     };
                 }
                 const url = media ? media.url : '';
-                if(media){
+
+                if(this.checkBlackList(media)){
+
                     html += `
     <div id="post-${id}" class="media-post-container">
         <div class="media-post flex-row">
             <div class="flex-column left-side flex-spread">
                 <div class="text-box">
-                    <a href="/profile/index.html?user=${author.name}">${author.name}</a>
+                    <a href="/profile/index.html?user=${author.name}">${authorString}</a>
                     <h3 class="title">${title}</h3>
                     <span>${cleanDate(created)}${editText}</span>
                     <p class="fs-6 text">${body}</p>
@@ -225,7 +242,7 @@ export const postsObject = {
         postsArray.forEach((post) => {
             const { id,media } = post;
             const postContainer = document.querySelector(`#feedContainer #post-${id}`);
-            if(media){
+            if(this.checkBlackList(media)){
                 showCount++
                 const mediaPost =  postContainer.querySelector('.media-post')
                 mediaPost.addEventListener("click", (event) =>{
@@ -247,15 +264,6 @@ export const postsObject = {
                         modalObject.hide()
                     })
                 })
-                if (this.user === post.author.name) {
-                    const editButton = mediaPost.querySelector('.edit-button')         
-                    editButton.addEventListener("click", (event) =>{
-                        event.preventDefault()
-                        formObject.editThis(post)
-                        modalObject.modalContainer.classList.add('hide-modal')
-                        modalObject.modalDisplay.innerHTML=""
-                    });
-                }
             }else{
                 noImageCount++
             }
@@ -334,14 +342,22 @@ export const postsObject = {
             })
             //Add post edit button if user owns post
             if (this.user === post.author.name) {
-                const editButton = modalObject.modalDisplay.querySelector('.edit-button')         
-                editButton.addEventListener("click", (event) =>{
-                    event.preventDefault()
-                    formObject.editThis(post)
-                    modalObject.modalContainer.classList.add('hide-modal')
-                    modalObject.modalDisplay.innerHTML=""
-                });
-            }
+                    const editButton = modalObject.modalDisplay.querySelector('.edit-button')         
+                    editButton.addEventListener("click", (event) =>{
+                        event.preventDefault()
+                        formObject.editThis(post)
+                        modalObject.modalContainer.classList.add('hide-modal')
+                        modalObject.modalDisplay.innerHTML=""
+                    });
+                    const deleteButton = modalObject.modalDisplay.querySelector('.delete-button')       
+                    deleteButton.addEventListener("click", (event) =>{
+                        event.preventDefault()
+                        this.deletePost(post.id)
+                        modalObject.modalContainer.classList.add('hide-modal')
+                        modalObject.modalDisplay.innerHTML=""
+                    });
+                }
+
         }
     },
     async searchForTag (filterBy){
@@ -350,7 +366,7 @@ export const postsObject = {
     },
     async deletePost(id){
         id = id ? id : Number(formObject.container.querySelector('#postID').value)
-        const response = await api.call("",postsEndpoint,deleteApi,"/"+id)
+        const response = await api.call("",api.postsEndpoint,api.deleteApi,"/"+id)
         if(response.ok){
             window.history.pushState({}, '', 'index.html');
             this.updatePosts()
@@ -363,3 +379,4 @@ export const postsObject = {
 
 
 
+postsObject.setUp()
