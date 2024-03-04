@@ -32,6 +32,10 @@
 .media-post-container .media-post .only-modal {
   display: none;
 }
+.media-post-container .media-post .post-author {
+  color: grey;
+  text-decoration: none;
+}
 .media-post-container .media-post .text-box {
   font-size: 1rem;
   height: 150px;

@@ -82,7 +82,7 @@ export const postsObject = {
                 if(inProfilePage){
                     const userParam = profileInfo.userData.name
                     const user = userParam ? "?user="+userParam : ""
-                    window.location.href="./index.html"+user
+                    updatePosts()
                 }else{
                     const urlID = getUrlParam('id')
                     const id = urlID ? "?id="+urlID : ""
@@ -181,7 +181,7 @@ export const postsObject = {
         <div class="media-post flex-row">
             <div class="flex-column left-side flex-spread">
                 <div class="text-box">
-                    <a href="/profile/index.html?user=${author.name}">${authorString}</a>
+                    <a class="post-author" href="/profile/index.html?user=${author.name}">@${authorString}</a>
                     <h3 class="title">${title}</h3>
                     <span>${cleanDate(created)}${editText}</span>
                     <p class="fs-6 text">${body}</p>
