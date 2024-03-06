@@ -24,6 +24,7 @@ export const api = {
         const postData = {
             'method':method
         }
+        console.log(data,endPoint,method,endUrl)
         let url = this.baseUrl + endPoint
         method = method ? method : "GET"
         data = data ? data : ""

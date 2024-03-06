@@ -16,12 +16,13 @@ export default class Profile {
         this.setup()
     }
     async setup(){
-        const respons = await api.call('',api.profileEndPoint,api.getApi,'/'+this.userName)
+        const respons = await api.call('',api.profileEndPoint+'/'+this.userName,api.getApi)
         const json = await respons.json()    
         this.userData = json.data
         this.loggedInUser = getUserName()
+        console.log(this.userData)
         this.profilePage.innerHTML=this.template(this.userData)
-        const postRespons = await api.call('',api.profileEndPoint+"/"+this.userName+"/posts"+"?",api.getApi, postsObject.settings.endApi)
+        const postRespons = await api.call('',api.profileEndPoint+"/"+this.userName+"/posts",api.getApi, postsObject.settings.endApi)
         const jsonPosts = await postRespons.json()
 
         postsObject.addPosts(jsonPosts.data)     
