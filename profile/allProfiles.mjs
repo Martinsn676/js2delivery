@@ -15,8 +15,14 @@ export const allProfiles = {
     },
     async addProfiles(){
         const respons = await api.call('',api.profileEndPoint,api.getApi)
-        const json = await respons.json()
-        this.createHTML(json.data)
+        
+        
+        if(respons.ok){
+const json = await respons.json()
+            this.createHTML(json.data)
+        }else{
+            errorMessage=await api.getErrorJson(respons,'load all profiles')
+        }
     },
     createHTML(data){
         console.log(data[0])

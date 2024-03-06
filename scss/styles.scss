@@ -22,3 +22,20 @@
 .icon-button:hover {
   background-color: #0056b3; /* Darker blue on hover */
 }
+
+#logInSection{
+  @media (min-width: 600px) {
+    max-width: 50%;
+  }
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+#frontPageLogo{
+  img{
+    width: 100%;
+    height: auto;  
+}
+}

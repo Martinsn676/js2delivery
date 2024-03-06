@@ -17,16 +17,19 @@
 </head>
 <body>
 <main class="container">
-<div class="col-6">
-    <form id="loginForm" class="form-container col-12 needs-validation m-3" method="get" novalidate>
-        <div class="m-3">
+<section id="logInSection">
+    <div id="frontPageLogo" class="col-12">
+        <img src="../files/logoWide.png">
+    </div>
+    <form id="loginForm" class="form-container col-12 needs-validation mt-3" method="get" novalidate>
+        <div class="mt-3">
             <label for="email" class="form-label">E-mail</label>
             <input required type="text" class="form-control" id="emailInput" name="email" value="">
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
-        <div class="m-3">
+        <div class="mt-3">
             <label for="password" class="form-label">Password</label>
             <input required type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
             <div class="invalid-feedback">
@@ -38,23 +41,23 @@
         <button class="" type="submit">Log in</button>
     </form>
 
-
-    <form id="creatUserForm" class="form-container col-12 needs-validation m-3" method="get" novalidate>
-        <div class="m-3">
+    <div> ------ or ------ </div>
+    <form id="creatUserForm" class="form-container col-12 needs-validation" method="get" novalidate>
+        <div class="mt-3">
             <label for="userName" class="form-label">Username</label>
             <input required type="text" class="form-control" id="usernameInput" name="username" value="">
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
-        <div class="m-3">
+        <div class="mt-3">
             <label for="email" class="form-label">E-mail</label>
             <input required type="text" class="form-control" id="emailInput" name="email" value="">
             <div class="valid-feedback">
                 Looks good!
             </div>
         </div>
-        <div class="m-3">
+        <div class="mt-3">
             <label for="password" class="form-label">Password</label>
             <input required type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
             <div class="invalid-feedback">
@@ -65,7 +68,7 @@
         </div>
         <button class="" type="submit">Crate User</button>
     </form>
-</div>
+</section>
 </main>
 </body>
 </html>

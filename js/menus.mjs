@@ -1,5 +1,7 @@
 import { getUserName } from "./global.mjs"
 import { submitPostForm } from "./postForms.mjs"
+import { signOut } from "./global.mjs"
+import { postsObject } from "./loadPosts.mjs"
 
 
 const onlyPc = "nav-item d-none d-sm-inline"
@@ -19,12 +21,12 @@ const menu ={
         ['bi bi-bell', 'Notifications',noUrl,'button'],
         ['bi bi-gear', 'Settings',noUrl,'button'],
         ['',`Logged in as ${getUserName()}`,`../profile/index.html?user=${getUserName()}`,'mt-4',],
-        ['bi bi-box-arrow-in-left', 'Log out','signOut()','button'],
+        ['bi bi-box-arrow-in-left', 'Log out','signOutButton','button'],
         
     ],
     //text left to be used as helping tool or something
     'bottomItems':[
-        [`bi bi-house`,'Home','../index.html'],
+        [`bi bi-house`,'Home','../feed/index.html'],
         ['bi bi-instagram', 'Explore','../feed/index.html'],
         ['bi bi-play-circle', 'Videos',noUrl],
         ['bi bi-chat', 'Messages',noUrl],
@@ -54,7 +56,8 @@ const menu ={
         let display = "";
 
         if(action[0]!="." && action[0]!="#"){
-            type1 = `<button class="nav-link icon-button" onclick="${action}">`
+            //if button, add id for targeting eventlistener
+            type1 = `<button class="nav-link icon-button" id="${action}">`
             type2 = `</button>`
         }else{
             type1 = `<a class="nav-link icon-button" href="${action}">`
@@ -75,53 +78,76 @@ const menu ={
                 ${type2}
             </li>`;
     },
-}
-export function toggleMobileForm(){
-    document.getElementById('mobile-form').classList.toggle('form-hidden')
-}
 
-export function addMenus (){
-    document.getElementById('nav-menu').innerHTML =`<ul class="col list-unstyled hide-mb">${menu.addItems(menu.pcItems)}</ul>`
-    document.getElementById('bottom-menu').innerHTML = `<ul class="justify-content-between hide-pc">${menu.addItems(menu.bottomItems)}</ul>`
-    document.getElementById('top-section').innerHTML=`
-        <ul class="justify-content-between hide-pc">
-            ${menu.addItems(menu.topItems)}
-        </ul>
-        <form id="mobile-form" class="form-container form-hidden">
-            ${formObject.postTemplate}
-        </form>`
+    toggleMobileForm(){
+        document.getElementById('mobile-form').classList.toggle('form-hidden')
+    },
+    addMenus (){
+        document.getElementById('nav-menu').innerHTML =`
+            <ul class="col list-unstyled hide-mb">
+                ${menu.addItems(menu.pcItems)}
+            </ul>`
+        document.getElementById('bottom-menu').innerHTML = `
+            <ul class="justify-content-between hide-pc">
+                ${menu.addItems(menu.bottomItems)}
+            </ul>`
+        document.getElementById('top-section').innerHTML=`
+            <ul class="justify-content-between hide-pc">
+                ${menu.addItems(menu.topItems)}
+            </ul>
+            <form id="mobile-form" class="form-container form-hidden">
+                ${formObject.postTemplate}
+            </form>`
+        const filterMenu = document.getElementById('filter-menu')
+        if(filterMenu){
+            document.getElementById('filter-menu').innerHTML=`        
+                <div class="col-6 ">
+                <input id="searchField" type="text" class="form-control border-primary text-left rounded-1"
+                    placeholder="Themes, feelings, places ... ">
+                </input>
+                </div>
+                <div class="col-4">
+                <select class="">
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="popularity">Popularity</option>
+                </select>
+                </div>`
+        }
+        //Add mobile form
+        document.getElementById('mobile-form').innerHTML=formObject.postTemplate
 
-    //Add mobile form
-    document.getElementById('mobile-form').innerHTML=formObject.postTemplate
+        //Add search functions
+        const searchField = document.querySelector('#searchField');
+        if(searchField){
+            searchField.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    // Execute your search logic here
+                    console.log('Search query:', event.target.value);
+                    postsObject.updatePosts(event.target.value)
+                }
+            });
 
-    //Add search functions
-    const searchField = document.querySelector('#searchField');
-    if(searchField){
-        searchField.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                // Execute your search logic here
-                console.log('Search query:', event.target.value);
-                postsObject.updatePosts(event.target.value)
-            }
-        });
+        }
 
+
+        document.getElementById('post-form').innerHTML=formObject.postTemplate
+        formObject.container = document.getElementById('post-form')
+        formObject.templateFunctions()
+        
+        formObject.container.addEventListener('submit', (event) => submitPostForm(event));
+        const imageInput = document.querySelector('#sideMenu #imageUrlInput')
+        console.log(imageInput)
+        imageInput.addEventListener('change',()=>formObject.updateImagePreview(event))
+        const toggleFormbutton = document.querySelector('#bottom-menu .toggle-post-button')
+        const signOutButton = document.getElementById('signOutButton')
+        signOutButton.addEventListener('click',signOut)
+        toggleFormbutton.addEventListener('click',()=>toggleMobileForm())
+        tagsObject.addTagsButton = document.querySelector("#sideMenu #add-tags")
+        tagsObject.tagsLists = document.querySelectorAll('.tags-list')
+        tagsObject.tagInputs = document.querySelectorAll('.tagInput')
+        tagsObject.addTagsButton.addEventListener('click',()=>tagsObject.addTag())
     }
-
-
-    document.getElementById('post-form').innerHTML=formObject.postTemplate
-    formObject.container = document.getElementById('post-form')
-    formObject.templateFunctions()
-    
-    formObject.container.addEventListener('submit', (event) => submitPostForm(event));
-    const imageInput = document.querySelector('#sideMenu #imageUrlInput')
-    console.log(imageInput)
-    imageInput.addEventListener('change',()=>formObject.updateImagePreview(event))
-    const toggleFormbutton = document.querySelector('#bottom-menu .toggle-post-button')
-    toggleFormbutton.addEventListener('click',()=>toggleMobileForm())
-    tagsObject.addTagsButton = document.querySelector("#sideMenu #add-tags")
-    tagsObject.tagsLists = document.querySelectorAll('.tags-list')
-    tagsObject.tagInputs = document.querySelectorAll('.tagInput')
-    tagsObject.addTagsButton.addEventListener('click',()=>tagsObject.addTag())
 }
 export const tagsObject = {
     'tags':[],
@@ -281,7 +307,7 @@ export const formObject = {
             rows="2" 
             placeholder="Description"
         ></textarea>
-
+        <div id="textAreaCount">
         <div id="tags-input-group" class="input-group">
             <input type="text" class="clearable" id="tagInput" placeholder="Add tags" aria-label="Add tags" aria-describedby="add-tags">
             <button id="add-tags" class="add-tags" type="button">Add</button>
@@ -310,4 +336,4 @@ export const formObject = {
 }
 
 
-addMenus()
+menu.addMenus()

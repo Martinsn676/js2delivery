@@ -35,38 +35,42 @@ export const local = {
 
 }
 
-  function cleanDate (dateString){
-      const date = new Date(dateString);
+function cleanDate (dateString){
+    const date = new Date(dateString);
 
-      // Extract individual date components
-      const day = date.getDate();
-      const month = date.getMonth() + 1; // Month is zero-based, so we add 1
-      const year = date.getFullYear() % 100; // Get last two digits of the year
+    // Extract individual date components
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Month is zero-based, so we add 1
+    const year = date.getFullYear() % 100; // Get last two digits of the year
 
-      // Format the date components as 'DD.MM.YY'
-      const formattedDate = `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
-      return formattedDate
-  }
-  /**
-  * 
-  * @returns Localsave username
-  */
-  function getUserName(){
-      const userName = local.get('userName')
-      return userName
-  }
-
-  function getUrlParam(findElement) {
-    let params = new URLSearchParams(window.location.search);
-    let param = params.get(findElement);
-    return param ? param : false;
-  }
-  /**
-  * Deletes local storage and moves to /index.html
-  */
-  function signOut(){
-      localStorage.clear()
-      window.location.href = '../index.html'
-  }
+    // Format the date components as 'DD.MM.YY'
+    const formattedDate = `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
+    return formattedDate
+}
+/**
+* 
+* @returns Localsave username
+*/
+function getUserName(){
+    const userName = local.get('userName')
+    return userName
+}
+/**
+ * 
+ * @param {string} findElement string text to look for in Url
+ * @returns return param or False
+ */
+function getUrlParam(findElement) {
+  let params = new URLSearchParams(window.location.search);
+  let param = params.get(findElement);
+  return param ? param : false;
+}
+/**
+* Deletes local storage and moves to /index.html
+*/
+function signOut(){
+    localStorage.clear()
+    window.location.href = '../index.html'
+}
 
 export {cleanDate,getUserName,getUrlParam,signOut}

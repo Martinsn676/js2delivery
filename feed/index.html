@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../css/form.css">
   <link rel="stylesheet" href="../css/posts.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
-  <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
@@ -39,19 +39,8 @@
     <section class="col flex-column">
       <!-- Top row filter -->
       <div id="filter-menu" class="form-container flex-row flex-spread">
-        <!-- Search field -->
-        <div class="col-6 ">
-          <input id="searchField" type="text" class="form-control border-primary text-left rounded-1"
-            placeholder="Themes, feelings, places ... ">
-        </input>
-        </div>
-        <div class="col-4">
-          <select class="">
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="popularity">Popularity</option>
-          </select>
-        </div>
+        <!-- add search field -->
+        <!-- add sort -->
       </div>
       <!-- showing search results -->
       <div id="searchResultContainer"></div>

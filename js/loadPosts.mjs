@@ -28,7 +28,6 @@ export const modalObject = {
             window.history.pushState({}, '', 'index.html');
             console.log("hide modal")
             this.modalContainer.classList.add('hide-modal')
-
         })
     },
     show(){
@@ -78,25 +77,21 @@ export const postsObject = {
             const resetButton = searchResultContainer.querySelector('#reset-button')
             const inProfilePage = window.location.pathname.endsWith("/profile/index.html");
             if(resetButton){
-            resetButton.addEventListener('click',()=>{
-                if(inProfilePage){
-                    const userParam = profileInfo.userData.name
-                    const user = userParam ? "?user="+userParam : ""
-                    updatePosts()
-                }else{
-                    const urlID = getUrlParam('id')
-                    const id = urlID ? "?id="+urlID : ""
-                    window.location.href="./index.html"+id
-                    if(urlID!=false){
-                        this.displayPost(urlID)
+                resetButton.addEventListener('click',()=>{
+                    if(inProfilePage){
+                        const userParam = profileInfo.userData.name
+                        const user = userParam ? "?user="+userParam : ""
+                        updatePosts()
+                    }else{
+                        const urlID = getUrlParam('id')
+                        const id = urlID ? "?id="+urlID : ""
+                        window.location.href="./index.html"+id
+                        if(urlID!=false){
+                            this.displayPost(urlID)
+                        }
                     }
-                }
-                
-            })
-            }
-
-
-            
+                })
+            }           
         }
     },
     async addPosts(postsArray){
@@ -161,7 +156,7 @@ export const postsObject = {
                 //           //  someting is wrong
                 if(reactions[0]){
                     for(let i = 0 ; i < reactions.length; i++){
-                        if(reactions[i].reactors.find(reactor => reactor === this.user)){
+                        if(reactions[i].reactors && reactions[i].reactors.find(reactor => reactor === this.user)){
                             reactiosnHtml+=`<div class="post-reactions active">`
                         }else{
                             reactiosnHtml+=`<div class="post-reactions">`
@@ -172,6 +167,9 @@ export const postsObject = {
                             </div>`
                     };
                 }
+
+                //Disabling the reactions
+                reactiosnHtml=""
                 const url = media ? media.url : '';
 
                 if(this.checkBlackList(media)){

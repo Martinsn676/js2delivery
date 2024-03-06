@@ -70,6 +70,7 @@ export const api = {
     async getErrorJson(respons,origin){
         const json = await respons.json()
         const errors = json.errors
+console.log(json)
         origin = origin ? origin : 'No manual origin'
         let errorMessages = ""
         errors.forEach(error => {
