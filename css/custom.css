@@ -12,6 +12,8 @@
 #sideMenu {
   max-width: 200px;
   padding-right: 20px;
+  position: fixed;
+  top: 0;
 }
 #sideMenu .iconButton {
   margin-bottom: 10px;

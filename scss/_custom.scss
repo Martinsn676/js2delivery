@@ -9,21 +9,31 @@ main{
         max-width: 1200px;
         margin: auto;
     }
+    @media (max-width: 500px) {
+      padding-bottom: 100px;
+    }
 }
 // Use the CSS variables within SCSS
-#sideMenu {
-    max-width: 200px;
-    padding-right: 20px;
-    .iconButton{
-        margin-bottom: 10px;
+#sideMenuContainer{
+    @media only screen and (min-width:500px){ 
+         padding-right: 20px;
     }
-    .main-logo img{
-        width: 100%;
+    #sideMenu {
+        max-width: 200px;
+        padding-right: 20px;
+        position: fixed;
+        top: 0;
+        .iconButton{
+            margin-bottom: 10px;
+        }
+        .main-logo img{
+            width: 100%;
+        }
+    // Apply a media query using the CSS variable
+    @media (max-width: 500px) {
+        display: none;
     }
-  // Apply a media query using the CSS variable
-  @media (max-width: 500px) {
-    display: none;
-  }
+    }
 }
 #feedContainer > div {
     width: calc(100% - var(--media-post-padding));
@@ -121,6 +131,6 @@ main{
     }
 }
 #filter-menu{
-    padding-top: 20px;
+    padding: 40px 0 20px;
     background-color: white;
 }

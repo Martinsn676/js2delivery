@@ -13,7 +13,6 @@
 
 }
 #profile-page{
-    padding: 20px;
     #banner-container{
         position: relative;
         height: 200px;
@@ -32,15 +31,21 @@
     }
     .left-side{
         position: relative;
-        #image-container {
-            position: relative;
-            overflow: hidden;
+    #image-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%; 
+        padding-top: 100%; 
+        border-radius: 50%;
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            border-radius: 50%;
-            img{
-                max-width: 10px;
-            }
+            height: 100%;
+            object-fit: cover; 
         }
+    }
         .edit-button {
             position: absolute;
             top: 50%;

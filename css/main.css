@@ -9,19 +9,31 @@
     margin: auto;
   }
 }
+@media (max-width: 500px) {
+  main {
+    padding-bottom: 100px;
+  }
+}
 
-#sideMenu {
+@media only screen and (min-width: 500px) {
+  #sideMenuContainer {
+    padding-right: 20px;
+  }
+}
+#sideMenuContainer #sideMenu {
   max-width: 200px;
   padding-right: 20px;
+  position: fixed;
+  top: 0;
 }
-#sideMenu .iconButton {
+#sideMenuContainer #sideMenu .iconButton {
   margin-bottom: 10px;
 }
-#sideMenu .main-logo img {
+#sideMenuContainer #sideMenu .main-logo img {
   width: 100%;
 }
 @media (max-width: 500px) {
-  #sideMenu {
+  #sideMenuContainer #sideMenu {
     display: none;
   }
 }
@@ -117,7 +129,7 @@
 }
 
 #filter-menu {
-  padding-top: 20px;
+  padding: 40px 0 20px;
   background-color: white;
 }
 
@@ -791,6 +803,9 @@
   padding: 5px;
   width: 100%;
 }
+.media-post-container.post-hidden {
+  display: none;
+}
 .media-post-container.expand .media-post {
   height: auto;
 }
@@ -887,6 +902,11 @@
 }
 
 /* ===== Modal ===== */
+@media only screen and (max-width: 500px) {
+  #modal {
+    display: none;
+  }
+}
 #modal .modal-display {
   z-index: 4;
   position: fixed;
@@ -1019,9 +1039,6 @@
   height: 100%;
 }
 
-#profile-page {
-  padding: 20px;
-}
 #profile-page #banner-container {
   position: relative;
   height: 200px;
@@ -1045,10 +1062,17 @@
   position: relative;
   overflow: hidden;
   width: 100%;
+  padding-top: 100%;
   border-radius: 50%;
 }
 #profile-page .left-side #image-container img {
-  max-width: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 #profile-page .left-side .edit-button {
   position: absolute;

@@ -9,7 +9,10 @@ const size = 'fs-5'
 const tagImport = await import("./tags.mjs");
 const tagsObject = new tagImport.default();
 
-
+const PostImport = await import("./loadPosts.mjs");
+const Post = new PostImport.default();
+const PostFormImport = await import("./postForms.mjs");
+const PostForm = new PostFormImport.default();
 export default class Menu {
     constructor(){
         this.pcItems=[
@@ -85,8 +88,7 @@ export default class Menu {
         document.getElementById('mobile-form').classList.toggle('form-hidden')
     }
     async addMenus (){
-        const PostFormObject = await import("./postForms.mjs");
-        const PostForm = new PostFormObject.default();
+
 
         document.getElementById('nav-menu').innerHTML =`
             <ul class="col list-unstyled hide-mb">
@@ -128,8 +130,9 @@ export default class Menu {
             searchField.addEventListener('keyup', (event) => {
                 if (event.key === 'Enter') {
                     // Execute your search logic here
+console.log(Post)
                     console.log('Search query:', event.target.value);
-                    postsObject.updatePosts(event.target.value)
+                    Post.updatePosts(event.target.value)
                 }
             });
 

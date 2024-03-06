@@ -39,7 +39,7 @@
   border-radius: 50%;
 }
 #profile-page .left-side #image-container img {
-  max-width: 10px;
+  max-width: 100%;
 }
 #profile-page .left-side .edit-button {
   position: absolute;

@@ -1,7 +1,6 @@
 const LocalImport = await import("./localSave.mjs");
 const Local = new LocalImport.default();
 export const api = {
-    
     'baseUrl' : 'https://v2.api.noroff.dev',
     'logInEndPoint' : '/auth/login',
     'createEndpoint'  : '/auth/register',
@@ -22,39 +21,34 @@ export const api = {
     * @returns {response}
     */
     async call(data,endPoint,method,endUrl) {
-    const postData = {}
-    let url = ""
-
-    url = this.baseUrl + endPoint;
-    method = method ? method : "GET"
-    data = data ? data : ""
-    if(endPoint===api.searchEndpoint){
-        if(data.length>0){
-            url+=data+"&"
-        }else{
-            url = this.baseUrl + this.postsEndpoint+"?"
+        const postData = {
+            'method':method
         }
-    }
+        let url = this.baseUrl + endPoint
+        method = method ? method : "GET"
+        data = data ? data : ""
+        if(endPoint===api.searchEndpoint){
+            url = data.length>0 ? `${url+data}&`:`${this.baseUrl+this.postsEndpoint}?` 
+        }else{
+            url = endUrl ? `${url}?${endUrl}` : url;
+        }
+        //Send body if object provided
+        if(typeof data === 'object'){
+            postData.body = JSON.stringify(data);
+        }
+        
+        let accesstoken = await Local.get('accesstoken')
+        accesstoken = accesstoken ? `Bearer ${accesstoken}`: "";
+        let apiKey = await Local.get('apiKey')
+        apiKey = apiKey ? apiKey: "";
+        postData.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': accesstoken,
+            "X-Noroff-API-Key": apiKey,
+            };
 
-    url = endUrl ? url + endUrl : url
-    postData.method = method
-    //Send body if object provided
-    if(typeof data === 'object'){
-        postData.body = JSON.stringify(data);
-    }
-    
-    let accesstoken = await Local.get('accesstoken')
-    accesstoken = accesstoken ? `Bearer ${accesstoken}`: "";
-    let apiKey = await Local.get('apiKey')
-    apiKey = apiKey ? apiKey: "";
-    postData.headers = {
-        'Content-Type': 'application/json',
-        'Authorization': accesstoken,
-        "X-Noroff-API-Key": apiKey,
-        };
-    console.log(url,postData)
-    const response = await this.fetchApi(url, postData)
-    return response
+        const response = await this.fetchApi(url, postData)
+        return response
     },
     async fetchApi(url, postData){
         try {
@@ -70,13 +64,13 @@ export const api = {
     async getErrorJson(respons,origin){
         const json = await respons.json()
         const errors = json.errors
-console.log(json)
         origin = origin ? origin : 'No manual origin'
         let errorMessages = ""
         errors.forEach(error => {
             errorMessages+=error.message+"!"
         });
         console.warn(errorMessages)
+        console.log(json)
         console.log('Origin of error:',origin)
         console.trace()
         return errorMessages

@@ -55,8 +55,8 @@ export default class PostForm {
     }
     editThis(post) {
         const { media, id, title, body, tags } = post
-this.container = document.getElementById('post-form')     
-   const imageUrlInput = this.container.querySelector('#imageUrlInput');
+        this.container = document.getElementById('post-form')     
+        const imageUrlInput = this.container.querySelector('#imageUrlInput');
         const titleInput = this.container.querySelector('#titleInput');
         const textInput = this.container.querySelector('#textInput');
         const postID = this.container.querySelector('#postID')
@@ -70,7 +70,7 @@ this.container = document.getElementById('post-form')
         this.activateForm('edit')
         this.updateImagePreview()
         const imagePreview = document.querySelector('#sideMenu #imagePreview')
-        imagePreview.scrollIntoView({ behavior: 'smooth' }); // Smooth scrolling
+        imagePreview.scrollIntoView({ behavior: 'smooth' });
     }
     templateFunctions(){
         this.container.querySelector('#cancel-button').addEventListener('click',()=>{
