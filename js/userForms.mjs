@@ -1,5 +1,7 @@
 import { api } from "./apiCalls.mjs";
-import { local } from "./global.mjs";
+
+const LocalImport = await import("./localSave.mjs");
+const Local = new LocalImport.default();
 
 const allUserForms = document.querySelectorAll('form')
 allUserForms.forEach(form => {
@@ -8,12 +10,19 @@ allUserForms.forEach(form => {
 
 async function submitForm(event) {
     let testMode = true;
-    
+
     event.preventDefault();
     const formTarget = event.target;
     const formID = event.target.id
-
+    const errorMessageText = formTarget.querySelector('#errorMessageText')
+    errorMessageText.classList.add('d-none')
     if (formTarget.checkValidity()) {
+        const allFormParts = formTarget.querySelectorAll('.form-part');
+        allFormParts.forEach(part => {
+
+            part.classList.remove('is-invalid');
+            part.classList.add('is-valid');
+        })
         //User releated input
         const nameInput = formTarget.querySelector('#usernameInput');
         const name = nameInput ? nameInput.value : "";
@@ -24,10 +33,6 @@ async function submitForm(event) {
         const emailInput = formTarget.querySelector('#emailInput');
         const email = emailInput ? emailInput.value : false;
 
-        if(testMode){console.log("name:", name, "password:", password, "email:", email);}
-        
-        const errorMessageText = formTarget.querySelector('#errorMessageText')
-        errorMessageText.classList.add('d-none')
 
         let data = {}
         let errorMessage = ""
@@ -54,11 +59,11 @@ async function submitForm(event) {
                 const json = await response.json()
                 if(response.status===200){
                     console.log(json)
-                    local.save('accesstoken',json.data.accessToken)
-                    local.save('userName',json.data.name)
+                    Local.save('accesstoken',json.data.accessToken)
+                    Local.save('userName',json.data.name)
                     const keyResponse = await api.call(data,api.getApiKeyEndpoint,api.postApi)
                     const jsonKeyRepsonse = await keyResponse.json()
-                    local.save('apiKey',jsonKeyRepsonse.data.key)
+                    Local.save('apiKey',jsonKeyRepsonse.data.key)
                     window.location.href = '../feed/index.html'
                 }else{
                     errorMessage=json.errors[0].message
@@ -67,10 +72,26 @@ async function submitForm(event) {
             }
         }
         if(errorMessage!=""){
+            console.log(errorMessage)
             errorMessageText.innerText=errorMessage;
             errorMessageText.classList.remove('d-none')
         }
     }else{
-        if(testMode){console.log("failed validation")}
+        const invalidInputs = formTarget.querySelectorAll(':invalid');
+        invalidInputs.forEach(input => {
+            const inputContainer = input.closest('.form-part'); // Adjust selector as needed
+            if (inputContainer) {
+                inputContainer.classList.remove('is-valid');
+                inputContainer.classList.add('is-invalid');
+            }
+        });
+        const validInputs = formTarget.querySelectorAll(':valid');
+        validInputs.forEach(input => {
+        const inputContainer = input.closest('.form-part'); // Adjust selector as needed
+        if (inputContainer) {
+            inputContainer.classList.remove('is-invalid');
+            inputContainer.classList.add('is-valid');
+        }
+    });
     }
 }

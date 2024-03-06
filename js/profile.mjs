@@ -1,15 +1,21 @@
-import { postsObject,modalObject } from "../js/loadPosts.mjs";
-import { getUrlParam,getUserName } from "../js/global.mjs";
+import { getUrlParam, getUserName } from "../js/global.mjs";
 import { api } from "../js/apiCalls.mjs";
 
+let postsObject;
+let modalObject;
 
-console.trace()
-export const profileInfo = {
-    'profilePage':document.getElementById('profile-page'),
-    'userName':'',
-    'userData':[],
-    async setup(){
+const Modal = await import("./modal.mjs");
+modalObject = new Modal.default();
+const Post = await import("./loadPosts.mjs");
+postsObject = new Post.default();
+
+export default class Profile {
+    constructor(){
+        this.profilePage =document.getElementById('profile-page')
         this.userName = getUrlParam('user') ? getUrlParam('user') : getUserName()
+        this.setup()
+    }
+    async setup(){
         const respons = await api.call('',api.profileEndPoint,api.getApi,'/'+this.userName)
         const json = await respons.json()    
         this.userData = json.data
@@ -20,7 +26,7 @@ export const profileInfo = {
 
         postsObject.addPosts(jsonPosts.data)     
         this.addFunctions()
-    },
+    }
     template({avatar,banner,bio,email,name}){
         return `
     <div class="flex-column">
@@ -48,7 +54,7 @@ export const profileInfo = {
             </div>
         </div>
     </div>`
-    },
+    }
     addFunctions(){
         if(this.loggedInUser===this.userData.name){
             const bannerImage = document.querySelector('#banner-container .edit-button')
@@ -63,7 +69,7 @@ export const profileInfo = {
             })
         }
 
-    },
+    }
     async editImage(editing){
         modalObject.modalDisplay.innerHTML=this.changeImageForm()
         modalObject.show()
@@ -99,7 +105,7 @@ export const profileInfo = {
                 }
             }
         })
-    },
+    }
     changeImageForm(){
         return`
             <form id="change-image-form" class="form-container flex-column">

@@ -1,11 +1,18 @@
 import { getUrlParam } from "../js/global.mjs";
-import { postsObject,modalObject } from "../js/loadPosts.mjs";
+import Post from "../js/loadPosts.mjs"
 
-document.addEventListener("DOMContentLoaded", async function() {
-        await postsObject.updatePosts();
-        await modalObject.setup()
-        const id = getUrlParam('id')
-        if(id){
-            postsObject.displayPost(id)
-        }
-    });
+const postsObject = new Post
+
+
+// document.addEventListener("DOMContentLoaded", async function() {
+async function init(){
+    const menuObject = await import("../js/menu.mjs");
+    const Menu = new menuObject.default();
+    Menu.addMenus()
+    await postsObject.updatePosts();
+    const id = getUrlParam('id')
+    if(id){
+        postsObject.displayPost(id)
+    }
+}
+init()

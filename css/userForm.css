@@ -1,0 +1,12 @@
+.form-container {
+  background-color: red;
+}
+.form-container .valid-feedback, .form-container .invalid-feedback {
+  display: none;
+}
+.form-container .form-part.is-valid .valid-feedback {
+  display: block;
+}
+.form-container .form-part.is-inValid .invalid-feedback {
+  display: block;
+}

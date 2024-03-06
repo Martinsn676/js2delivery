@@ -161,7 +161,6 @@
 .form-container select {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box; /* Ensure padding is included in the width */
@@ -826,6 +825,7 @@
   text-decoration: none;
 }
 .media-post-container .media-post .text-box {
+  padding-top: 20px;
   font-size: 1rem;
   height: 150px;
   overflow: hidden;
@@ -881,9 +881,6 @@
 .media-post-container.expand .media-post .image-container {
   height: auto;
   overflow: visible;
-}
-.media-post-container.expand .media-post .image-container .img {
-  width: 100%;
 }
 .media-post-container.expand .media-post .blur {
   display: none;
@@ -1041,14 +1038,17 @@
 #profile-page #banner-container img {
   width: 100%;
 }
+#profile-page .left-side {
+  position: relative;
+}
 #profile-page .left-side #image-container {
   position: relative;
   overflow: hidden;
-  height: 300px;
-  width: 300px;
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
   border-radius: 50%;
+}
+#profile-page .left-side #image-container img {
+  max-width: 10px;
 }
 #profile-page .left-side .edit-button {
   position: absolute;
@@ -1063,4 +1063,28 @@
   height: 200px;
   background-color: white;
   padding: 10px;
+}
+
+.form-container .valid-feedback, .form-container .invalid-feedback {
+  display: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 5px;
+}
+.form-container .form-part.is-valid .valid-feedback {
+  background-color: #28a745; /* Green */
+  color: white;
+  display: block;
+}
+.form-container .form-part.is-invalid .invalid-feedback {
+  background-color: #dc3545; /* Red */
+  color: white;
+  display: block;
+}
+.form-container #errorMessageText {
+  background-color: #ffc107; /* Yellow */
+  color: black;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 5px;
 }

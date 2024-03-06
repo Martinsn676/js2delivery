@@ -1,9 +1,14 @@
-import { postsObject,modalObject } from "../js/loadPosts.mjs";
-import { profileInfo } from "../js/profile.mjs";
 
-document.addEventListener("DOMContentLoaded", function() {
-    postsObject.setUp();
-    modalObject.setup()
-    profileInfo.setup()
-});
+
+
+async function init(){
+    const menuObject = await import("../js/menu.mjs");
+    const Menu = new menuObject.default();
+    Menu.addMenus()
+    const profileImport = await import("../js/profile.mjs");
+    const ProfileInfo = new profileImport.default();
+    ProfileInfo.setup()
+}
+
+init()
 

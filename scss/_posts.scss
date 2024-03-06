@@ -6,6 +6,7 @@
   &.expand .media-post{
     height: auto;
     .text-box{
+
       height: auto;
     }
     .image-container{
@@ -39,6 +40,7 @@
       text-decoration:none;
     }
     .text-box{
+                padding-top: 20px;
       font-size: 1rem;
       height: 150px;
       overflow: hidden;
@@ -97,7 +99,7 @@
       height: auto;
       overflow: visible;
       .img{
-        width: 100%;
+        // width: 100%;
       }
     }
     .blur{

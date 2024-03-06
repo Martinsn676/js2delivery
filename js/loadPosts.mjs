@@ -1,54 +1,22 @@
-import { getUserName,getUrlParam,cleanDate  } from "./global.mjs"
+import { getUserName,getUrlParam  } from "./global.mjs"
 import { api } from "./apiCalls.mjs"
-import { submitPostForm } from "./postForms.mjs"
-import { formObject } from "./menus.mjs"
-import { profileInfo } from "./profile.mjs"
 
-// Render the posts and replace the old ones
-/**
- * //Get posts from api call and render them
- * @param {string} search optional search string
- * ```js
- *  const feedContainer = document.getElementById(`feedContainer`);
- *  const response = await getApi(postsEndpoint)
- *  const postsArray = apiResponse.data
- * ```
- */
-export const modalObject = {
-    //Variables used, but set later
-    'modalContainer':"",
-    'modalBackground':"",
-    'modalDisplay':"",
-    setup(){
-        this.modalContainer = document.getElementById('modal')
-        this.modalBackground = this.modalContainer.querySelector('.modal-back-ground')
-        this.modalDisplay = this.modalContainer.querySelector('.modal-display')
-        this.modalBackground.addEventListener('click',()=>{
-            // Clear the end of the URL
-            window.history.pushState({}, '', 'index.html');
-            console.log("hide modal")
-            this.modalContainer.classList.add('hide-modal')
-        })
-    },
-    show(){
-        this.modalContainer.classList.remove('hide-modal')
-    },
-    hide(){
-        this.modalContainer.classList.add('hide-modal')
-    }
-}
-export const postsObject = {
-    'settings':{
-        'endApi':'_author=true&_comments=true&_reactions=true'
-    },
-    //Variables used, but set later
-    'user':"",
-    'container':"",
-    'postsArray':[],
-    setUp(){
+
+const Modal = await import("./modal.mjs");
+const modalObject = new Modal.default();
+
+const PostFormImport = await import("./postForms.mjs");
+const PostForm = new PostFormImport.default();
+
+export default class Post {
+    constructor(){
+        this.settings = {
+            'endApi':'_author=true&_comments=true&_reactions=true'
+        }
         this.container=document.getElementById(`feedContainer`)
         this.user=getUserName()
-    },
+        this.postsArray = []
+    }
 
     async updatePosts(search,filter){
         search = search ? search :""
@@ -79,8 +47,8 @@ export const postsObject = {
             if(resetButton){
                 resetButton.addEventListener('click',()=>{
                     if(inProfilePage){
-                        const userParam = profileInfo.userData.name
-                        const user = userParam ? "?user="+userParam : ""
+                        // const userParam = profileInfo.userData.name
+                        // const user = userParam ? "?user="+userParam : ""
                         updatePosts()
                     }else{
                         const urlID = getUrlParam('id')
@@ -93,7 +61,7 @@ export const postsObject = {
                 })
             }           
         }
-    },
+    }
     async addPosts(postsArray){
         const html = await this.createHtml(postsArray)
         feedContainer.innerHTML = ""
@@ -101,13 +69,22 @@ export const postsObject = {
         // this.container.insertAdjacentHTML("beforeend", html);
         this.postsArray=postsArray
         this.addFunctions(postsArray)
-    },
-    checkBlackList(media){
-        if(!media || media.url.startsWith('https://unsplash.com') || media.url.startsWith('https://ibb')){
-            return false
+        PostForm.container=document.getElementById('form-container')
+    }   
+    //Blacklisting to hide 
+    checkBlackList({ body, media }) {
+        const bannedStarts = ['https://unsplash.com', 'https://ibb', 'https://url', 'Lorem'];
+
+        // Using a for...of loop
+        for (const banned of bannedStarts) {
+            if (!media || media.url.startsWith(banned) || body.startsWith(banned)) {
+                return true;
+            }
         }
-        return true
-    },
+
+        return false;
+    }
+
     async createHtml(postsArray){
         let html = ""
         postsArray.forEach((post) => {
@@ -172,7 +149,9 @@ export const postsObject = {
                 reactiosnHtml=""
                 const url = media ? media.url : '';
 
-                if(this.checkBlackList(media)){
+                if(!this.checkBlackList(post)){
+
+                    const date = new Date(created)
 
                     html += `
     <div id="post-${id}" class="media-post-container">
@@ -181,7 +160,7 @@ export const postsObject = {
                 <div class="text-box">
                     <a class="post-author" href="/profile/index.html?user=${author.name}">@${authorString}</a>
                     <h3 class="title">${title}</h3>
-                    <span>${cleanDate(created)}${editText}</span>
+                    <span>${date.toLocaleDateString()}${editText}</span>
                     <p class="fs-6 text">${body}</p>
                 </div>
                 <div class="blur"></div>
@@ -196,7 +175,7 @@ export const postsObject = {
                 
                 <ul class="tags-container list-unstyled">${tagHtml}</ul>
 
-                <div class="flex-row flex-spread">
+                <div id="comment-container" class="flex-row flex-spread">
                     <div class="hide-modal">
                         <i class="bi bi-chat-left"></i>
                         <span>${_count.comments}</span>
@@ -232,7 +211,7 @@ export const postsObject = {
             }
             });
             return html
-    },
+    }
     addFunctions(postsArray){
         let showCount = 0
         let badQuality = 0
@@ -240,11 +219,12 @@ export const postsObject = {
         postsArray.forEach((post) => {
             const { id,media } = post;
             const postContainer = document.querySelector(`#feedContainer #post-${id}`);
-            if(this.checkBlackList(media)){
+            if(this.checkBlackList(post)){
+                noImageCount++
+            }else{
                 showCount++
                 const mediaPost =  postContainer.querySelector('.media-post')
                 mediaPost.addEventListener("click", (event) =>{
-                console.log(event.target.tagName)
                 if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'LI' || event.target.tagName === 'I') {
                     // If it is, do nothing (stop propagation)
                     return;
@@ -262,8 +242,6 @@ export const postsObject = {
                         modalObject.hide()
                     })
                 })
-            }else{
-                noImageCount++
             }
         });
         console.groupCollapsed('Posts data',showCount+"/"+postsArray.length)
@@ -272,9 +250,10 @@ export const postsObject = {
             console.log("badQuality",badQuality)
             console.log("noImageCount",noImageCount)
         console.groupEnd()
-    },
+    }
     //Show in modal and add modal only functions
     async displayPost(findID){
+
         findID = Number(findID)
         //Find post from Array
         const post = this.postsArray.find(post => post.id === findID);
@@ -289,7 +268,7 @@ export const postsObject = {
         //or this if in pc version
         }else{
             //Get html, render and show post
-            const newHtml = await postsObject.createHtml([post])
+            const newHtml = await this.createHtml([post])
             modalObject.modalDisplay.innerHTML=newHtml
             modalObject.modalContainer.classList.remove('hide-modal')
 
@@ -343,7 +322,7 @@ export const postsObject = {
                     const editButton = modalObject.modalDisplay.querySelector('.edit-button')         
                     editButton.addEventListener("click", (event) =>{
                         event.preventDefault()
-                        formObject.editThis(post)
+                        PostForm.editThis(post)
                         modalObject.modalContainer.classList.add('hide-modal')
                         modalObject.modalDisplay.innerHTML=""
                     });
@@ -357,24 +336,20 @@ export const postsObject = {
                 }
 
         }
-    },
+    }
     async searchForTag (filterBy){
         console.log(filterBy)
         this.updatePosts('','&_tag='+filterBy)
-    },
+    }
     async deletePost(id){
-        id = id ? id : Number(formObject.container.querySelector('#postID').value)
+        id = id ? id : Number(PostForm.container.querySelector('#postID').value)
         const response = await api.call("",api.postsEndpoint,api.deleteApi,"/"+id)
         if(response.ok){
             window.history.pushState({}, '', 'index.html');
             this.updatePosts()
-            formObject.clearForm()
+            PostForm.clearForm()
         }else{
             api.getErrorJson(response,'delete post')
         }
-    },
+    }
 }
-
-
-
-postsObject.setUp()

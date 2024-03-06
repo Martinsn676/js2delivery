@@ -1,5 +1,5 @@
-import { local } from "./global.mjs";
-
+const LocalImport = await import("./localSave.mjs");
+const Local = new LocalImport.default();
 export const api = {
     
     'baseUrl' : 'https://v2.api.noroff.dev',
@@ -43,9 +43,9 @@ export const api = {
         postData.body = JSON.stringify(data);
     }
     
-    let accesstoken = await local.get('accesstoken')
+    let accesstoken = await Local.get('accesstoken')
     accesstoken = accesstoken ? `Bearer ${accesstoken}`: "";
-    let apiKey = await local.get('apiKey')
+    let apiKey = await Local.get('apiKey')
     apiKey = apiKey ? apiKey: "";
     postData.headers = {
         'Content-Type': 'application/json',
