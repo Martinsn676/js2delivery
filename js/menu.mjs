@@ -102,7 +102,7 @@ export default class Menu {
             <ul class="justify-content-between hide-pc">
                 ${this.addItems(this.topItems)}
             </ul>
-            <form id="mobile-form" class="form-container form-hidden">
+            <form id="mobile-form" class="form-container form-hidden blue-buttons ">
                 ${PostForm.postTemplate()}
             </form>`
         const filterMenu = document.getElementById('filter-menu')

@@ -1,17 +1,20 @@
 import { api } from "../js/apiCalls.mjs";
-import { postsObject } from "../js/loadPosts.mjs";
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    
-    postsObject.setUp();
+
+async function init(){
+    const menuObject = await import("../js/menu.mjs");
+    const Menu = new menuObject.default();
+    Menu.addMenus()
+
     allProfiles.setup();
     allProfiles.addProfiles()
-});
+}
 
+init()
 export const allProfiles = {
     setup() {
-        this.container = document.getElementById('all-profiles-container');
+        this.container = document.getElementById('profile-page');
     },
     async addProfiles(){
         const respons = await api.call('',api.profileEndPoint,api.getApi)

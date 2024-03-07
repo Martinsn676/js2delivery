@@ -12,16 +12,14 @@
     border-radius: 5px 0 0 5px;
     }
     #add-tags {
-        padding: 8px 15px;
-        border-left: none;
-        border-radius: 0 5px 5px 0;
-        cursor: pointer;
+      padding: 8px 15px;
+      border-left: none;
+      border-radius: 0 5px 5px 0;
+        margin-left: 0px;
+      cursor: pointer;
     }
 
 }
-
-
-
 // Clearable input field
 .clearable {
   position: relative;
@@ -35,9 +33,12 @@
   transform: translateY(-50%);
   cursor: pointer;
 }
-
-// Add button
-
+#post-form{
+  .form-label{
+    padding: 3px;
+  }
+  
+}
 
 
 /* Form input fields */
@@ -51,6 +52,7 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box; /* Ensure padding is included in the width */
+  margin-bottom: 4px;
 }
 
 /* Form submit button */
@@ -62,23 +64,42 @@
   background-color: var(--button-color);
   color: white;
   cursor: pointer;
+  margin: 5px;
 }
 //.form-container button[type="submit"]:hover {
 .form-container button:hover {
   background-color: var(--button-color-hover);
 }
+.form-container button:active{
+  background-color: var(--button-color-active);
+}
+.form-container button:disabled  {
+  background-color: var(--button-color-disabled);
+  cursor:default;
+}
+
 .tags-list,.tags-container{
     display: flex;
     flex-wrap: wrap;
     li{
-        padding: 4px;
-        margin: 3px;
+        font-size: 12px;
+        padding: 5px 10px;
+        margin-right: 5px;
         border-radius: 5px;
+        margin: 2px;
         color: white;
+        font-weight: bold;
         background-color:var(--button-color) ;
         min-width:25px;
         text-align: center;
         cursor: pointer;
+        border: 1px solid #0056b3;
+    }
+    li:hover{
+      background-color: var(--button-color-hover);
+    }
+    li:active{
+      background-color: var(--button-color-active);
     }
 }
 #textInput{

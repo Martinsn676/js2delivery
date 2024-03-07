@@ -9,14 +9,20 @@ allUserForms.forEach(form => {
 });
 
 async function submitForm(event) {
-    let testMode = true;
-
     event.preventDefault();
     const formTarget = event.target;
     const formID = event.target.id
     const errorMessageText = formTarget.querySelector('#errorMessageText')
     errorMessageText.classList.add('d-none')
-    if (formTarget.checkValidity()) {
+
+    const emailInput = formTarget.querySelector('#emailInput');
+    function isValidEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@(noroff\.no|stud\.noroff\.no)$/; 
+        return emailRegex.test(email);
+    }
+
+
+    if (formTarget.checkValidity() && isValidEmail(emailInput.value)) {
         const allFormParts = formTarget.querySelectorAll('.form-part');
         allFormParts.forEach(part => {
 
@@ -76,22 +82,40 @@ async function submitForm(event) {
             errorMessageText.innerText=errorMessage;
             errorMessageText.classList.remove('d-none')
         }
-    }else{
-        const invalidInputs = formTarget.querySelectorAll(':invalid');
-        invalidInputs.forEach(input => {
-            const inputContainer = input.closest('.form-part'); // Adjust selector as needed
-            if (inputContainer) {
-                inputContainer.classList.remove('is-valid');
-                inputContainer.classList.add('is-invalid');
+        } else {
+
+            const invalidInputs = formTarget.querySelectorAll(':invalid');
+            invalidInputs.forEach(input => {
+                const inputContainer = input.closest('.form-part'); 
+                if (inputContainer) {
+                    inputContainer.classList.remove('is-valid');
+                    inputContainer.classList.add('is-invalid');
+                }
+            });
+
+            const validInputs = formTarget.querySelectorAll(':valid');
+            validInputs.forEach(input => {
+                const inputContainer = input.closest('.form-part'); 
+                if (inputContainer) {
+                    inputContainer.classList.remove('is-invalid');
+                    inputContainer.classList.add('is-valid');
+                }
+            });
+            //Direct check for regex in form didnt work
+            if(isValidEmail(emailInput.value)){
+                const inputContainer = emailInput.closest('.form-part'); 
+                console.log(inputContainer)
+                if (inputContainer) {
+                    inputContainer.classList.remove('is-invalid');
+                    inputContainer.classList.add('is-valid');
+                }
+            }else{
+                const inputContainer = emailInput.closest('.form-part'); 
+                if (inputContainer) {
+                    inputContainer.classList.remove('is-valid');
+                    inputContainer.classList.add('is-invalid');
+                }
             }
-        });
-        const validInputs = formTarget.querySelectorAll(':valid');
-        validInputs.forEach(input => {
-        const inputContainer = input.closest('.form-part'); // Adjust selector as needed
-        if (inputContainer) {
-            inputContainer.classList.remove('is-invalid');
-            inputContainer.classList.add('is-valid');
         }
-    });
-    }
+
 }

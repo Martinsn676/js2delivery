@@ -1,28 +1,26 @@
 /* Media post container */
 // Media post container
+:root {
+  --media-post-padding: 10px;
+}
 .media-post-container{
   padding:5px;
   width: 100%;
+  width: calc(100% - var(--media-post-padding));
+  @media (min-width: 600px) {
+      width: calc(50% - var(--media-post-padding));
+  }
+  @media (min-width: 800px) {
+      width: calc(33.33% - var(--media-post-padding));
+  }
+
+  @media (min-width: 1000px) {
+      width: calc(25% - var(--media-post-padding));
+  }
   &.post-hidden{
     display: none;
   }
-  &.expand .media-post{
-    height: auto;
-    .text-box{
 
-      height: auto;
-    }
-    .image-container{
-      height: auto;
-      overflow: visible;
-      .img{
-        width: 100%;
-      }
-    }
-    .blur{
-      display: none;
-    }
-  }
   .media-post{
     height: 440px;
     border: 1px solid #ccc;
@@ -78,18 +76,7 @@
         top:0
       }
     }
-    .tags-container {
-      display: flex;
-      li {
-        background-color: var(--background-color);
-        color: white;
-        font-size: 14px;
-        padding: 5px 10px;
-        margin-right: 5px;
-        border-radius: 5px;
-        border: 1px solid #0056b3; // Border color for tags
-      }
-    }
+
   }
 
 //To handle post in mboile view and expanding
@@ -106,7 +93,6 @@
       display: none;
     }
   }
-
 }
 /* ===== Modal ===== */
 

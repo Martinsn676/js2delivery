@@ -44,11 +44,11 @@ export default class Post {
             <div>
                 Showing search result for "${search}"
             </div>
-            <button id="reset-button">Reset</button>`
+            <button id="reset-button" class="blue-button>Reset</button>`
         }else if(filter!=""){
             const splitFilter = filter.split('=');
             searchResult="<div>Showing posts with the tag: "+splitFilter[1]+"</div>"
-            searchResult+=`<button id="reset-button">Reset</button>`
+            searchResult+=`<button id="reset-button" class="blue-button">Reset</button>`
         }
         if(searchResultContainer){
             searchResultContainer.innerHTML=searchResult
@@ -80,6 +80,7 @@ export default class Post {
         // this.container.insertAdjacentHTML("beforeend", html);
 console.log("hiddenPostsCount",hiddenPostsCount)
         if(hiddenPostsCount>0){
+            this.showMore.classList.remove('d-none')
             this.showMore.disabled=false
             this.showMore.addEventListener('click',(event)=>{
                 const hiddenPosts = feedContainer.querySelectorAll('.post-hidden')
