@@ -3,9 +3,7 @@
 :root {
   --media-post-padding: 10px;
 }
-.media-post-container{
-  padding:5px;
-  width: 100%;
+#feedContainer .media-post-container{
   width: calc(100% - var(--media-post-padding));
   @media (min-width: 600px) {
       width: calc(50% - var(--media-post-padding));
@@ -17,6 +15,12 @@
   @media (min-width: 1000px) {
       width: calc(25% - var(--media-post-padding));
   }
+
+}
+.media-post-container{
+  padding:5px;
+  width: 100%;
+
   &.post-hidden{
     display: none;
   }

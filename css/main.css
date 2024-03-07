@@ -806,25 +806,28 @@
   --media-post-padding: 10px;
 }
 
-.media-post-container {
-  padding: 5px;
-  width: 100%;
+#feedContainer .media-post-container {
   width: calc(100% - var(--media-post-padding));
 }
 @media (min-width: 600px) {
-  .media-post-container {
+  #feedContainer .media-post-container {
     width: calc(50% - var(--media-post-padding));
   }
 }
 @media (min-width: 800px) {
-  .media-post-container {
+  #feedContainer .media-post-container {
     width: calc(33.33% - var(--media-post-padding));
   }
 }
 @media (min-width: 1000px) {
-  .media-post-container {
+  #feedContainer .media-post-container {
     width: calc(25% - var(--media-post-padding));
   }
+}
+
+.media-post-container {
+  padding: 5px;
+  width: 100%;
 }
 .media-post-container.post-hidden {
   display: none;
