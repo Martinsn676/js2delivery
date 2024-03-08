@@ -10,12 +10,18 @@ main{
     @media (max-width: 500px) {
         padding-bottom: 100px;
     }
+
+    @media (max-width: 500px) {
+        padding-top: 80px;
+    }
+
 }
 // Use the CSS variables within SCSS
 #sideMenuContainer{
     @media only screen and (min-width:500px){ 
          padding-right: 20px;
     }
+
     #sideMenu {
         max-width: 200px;
         padding-right: 20px;
@@ -26,6 +32,14 @@ main{
         }
         .main-logo img{
             width: 100%;
+        }
+        #imagePreview{
+            max-height: 100px;
+            width: auto;
+        }
+        button{
+            white-space: nowrap;
+            margin: 1px;
         }
     // Apply a media query using the CSS variable
     @media (max-width: 500px) {
@@ -110,11 +124,7 @@ main{
     }
 }
 
-main{
-    @media (max-width: 500px) {
-        padding-top: 60px;
-    }
-}
+
 #filter-menu{
     padding: 40px 0 20px;
     background-color: white;

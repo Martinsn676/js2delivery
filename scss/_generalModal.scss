@@ -1,0 +1,27 @@
+#modal{
+    .only-modal{
+        display: flex;
+    }   
+    &.hide-modal,.hide-modal{
+        display: none!important;
+    }
+    .modal-display {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index:101;
+    }
+    .modal-back-ground{
+        position: fixed;
+        top:0px;
+        left: 0px;
+        width:100vw;
+        height:100vh;
+        display: block;
+        background-color: grey;
+        opacity: 0.5;
+        z-index: 100;
+    }
+
+}

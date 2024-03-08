@@ -7,7 +7,7 @@ async function init(){
     Menu.addMenus()
     const profileImport = await import("../js/profile.mjs");
     const ProfileInfo = new profileImport.default();
-    ProfileInfo.setup()
+    ProfileInfo.render()
 }
 
 init()

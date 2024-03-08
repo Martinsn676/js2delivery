@@ -1,20 +1,20 @@
 
 import { api } from "./apiCalls.mjs";
-
+import { formHandler } from "./formHandler.mjs";
 const tagImport = await import("./tags.mjs");
 const tagsObject = new tagImport.default();
 
+
 export default class PostForm {
-    constructor(){
-        this.container = document.getElementById('post-form')
-        this.testname = 'Dolly'
-    }
-    activateForm(type){
-        if(type==='edit'){
-            this.container.classList.add('edit-mode')
-        }else if(type==='post'){
-            this.container.classList.remove('edit-mode')
-        }
+    constructor(target){
+        this.container=target
+        target.innerHTML = this.template()
+        this.errorMessageText = target.querySelector('#errorMessageText')
+        this.imageInput = target.querySelector('#imageUrlInput')
+        this.titleInput = target.querySelector('#titleInput');
+        this.bodyInput = target.querySelector('#textInput');
+        this.idInput = target.querySelector('#postID');
+        this.addFunctions()
     }
     clearForm(){
         const formContainer = document.querySelector('#post-form')
@@ -24,63 +24,85 @@ export default class PostForm {
         });
         tagsObject.tags=[]
         tagsObject.update()
-        this.clearWarning()
-        this.activateForm('post')
-        this.updateImagePreview('')
-        
+        // // this.clearWarning()
+        // this.activateForm('post')
+        // this.updateImagePreview('')
     }
-    clearWarning(){
-        const errorMessageText = this.container.querySelector('#errorMessageText')
-        errorMessageText.classList.add('d-none')
-    }
-    updateImagePreview(event){
-
-        const value = document.querySelector('#sideMenu #imageUrlInput').value
-        const url = value ? value :""
-        const imagePreview = document.querySelector('#sideMenu #imagePreview')
-        const dummyImage = new Image();
-        if(url===""){
-            imagePreview.classList.add('d-none')
-        }else{
-            imagePreview.classList.remove('d-none')
-            imagePreview.src=url
-            dummyImage.onload = function(){
-                imagePreview.src=url
-            }
-            dummyImage.onerror = function(){
-                // stolen image
-                imagePreview.src = 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg'
-            }
-        }
-    }
-    editThis(post) {
-        const { media, id, title, body, tags } = post
-        this.container = document.getElementById('post-form')     
-        const imageUrlInput = this.container.querySelector('#imageUrlInput');
-        const titleInput = this.container.querySelector('#titleInput');
-        const textInput = this.container.querySelector('#textInput');
-        const postID = this.container.querySelector('#postID')
-
-        imageUrlInput.value = media.url;
-        titleInput.value = title;
-        textInput.value = body;
-        postID.value = id;
-
-        tagsObject.update(tags)
-        this.activateForm('edit')
-        this.updateImagePreview()
-        const imagePreview = document.querySelector('#sideMenu #imagePreview')
-        imagePreview.scrollIntoView({ behavior: 'smooth' });
-    }
-    templateFunctions(){
+    addFunctions(){
         this.container.querySelector('#cancel-button').addEventListener('click',()=>{
             event.preventDefault()
             this.clearForm()
         })
         this.container.querySelector('#delete-button').addEventListener("click", () => postsObject.deletePost());
-    }
-    postTemplate(){return `
+        this.container.addEventListener('submit', (event) => this.submitPostForm(event));
+        this.container.addTagsButton = document.querySelector("#sideMenu #add-tags")
         
+        this.container.tagInputs = document.querySelectorAll('.tagInput')
+        this.container.addTagsButton.addEventListener('click',(event)=>tagsObject.addTag(event))
+        //this.imageInput.addEventListener('change',()=>PostForm.updateImagePreview(event))
+    }
+    async submitPostForm(event) {
+        event.preventDefault();
+        if (this.container.checkValidity()) {
+            const title = this.titleInput ? this.titleInput.value : false;
+            const body = this.bodyInput ? this.bodyInput.value : false;
+            const id = this.idInput ? Number(this.idInput.value) : false;
+            const imageUrl = this.imageInput ? this.imageInput.value : false;
+            const imageAlt = this.imageInput ? 'User uploaded post image' : false;
+            let errorMessage = ""
+
+            let data = {
+                'title':title,
+                'body':body,
+                'tags':tagsObject.tags,
+                'media':{
+                    'url':imageUrl,
+                    'alt':imageAlt,
+                }
+            }
+
+            if(this.container.classList.contains('comment')){
+                const response = await api.call(data,api.postsEndpoint+`/${id}/comment`,api.postApi)
+                if(!response.ok){
+                    errorMessage=await api.getErrorJson(response,'comment post')
+                }
+            }else if(this.container.classList.contains('edit-mode')){
+                const response = await api.call(data,api.postsEndpoint+"/"+id,api.putApi)
+                if(response.ok){
+                    formHandler.update()
+                    formHandler.clearForms()
+                }else{
+                    errorMessage=await api.getErrorJson(response,'edit post')
+                }
+            }else{
+                const response = await api.call(data,api.postsEndpoint,api.postApi)
+                if(response.ok){
+                    formHandler.update()
+                    formHandler.clearForms()
+                }else{
+                    errorMessage=await api.getErrorJson(response,'create post')
+                }
+            }
+            if(errorMessage!=""){
+                this.errorMessageText.innerText=errorMessage;
+                this.errorMessageText.classList.remove('d-none')
+            }
+        }
+    }
+    editThis(post) {
+        const { media, id, title, body, tags } = post 
+        this.imageInput.value = media.url;
+        this.titleInput.value = title;
+        this.bodyInput.value = body;
+        this.idInput.value = id;
+
+        tagsObject.update(tags)
+        formHandler.activateForm('edit')
+        // this.updateImagePreview()
+        // const imagePreview = document.querySelector('#sideMenu #imagePreview')
+        imagePreview.scrollIntoView({ behavior: 'smooth' });
+    }
+    template(){return `
         <input 
             type="text" 
             class="d-none clearable" 
@@ -117,96 +139,29 @@ export default class PostForm {
             placeholder="Description"
         ></textarea>
         <div id="textAreaCount">
+        </div>
         <div id="tags-input-group" class="input-group">
             <input type="text" class="clearable" id="tagInput" placeholder="Add tags" aria-label="Add tags" aria-describedby="add-tags">
             <button id="add-tags" class="add-tags" type="button">Add</button>
         </div>
 
         <ul class="tags-list list-unstyled col-12"></ul>
-        <div class="buttons col-12 row">
-            <div class="button-container only-post-mode col-6">
+        <div class="buttons col-12 flex-row">
+            <div class="button-container only-post-mode">
                 <button type="submit" class="btn btn-primary">Post</button>
             </div>
-            <div class="button-container only-edit-mode col-6">
+            <div class="button-container only-edit-mode">
                 <button type="submit" class="btn btn-primary">Edit post</button>
             </div>
-            <div class="button-container only-edit-mode col-6">
+            <div class="button-container only-edit-mode">
                 <button id="delete-button" type="button" class="btn btn-primary" class="btn btn-primary">Delete</button>
             </div>
-            <div class="button-container only-edit-mode col-6">
+            <div class="button-container only-edit-mode">
                 <button id="cancel-button" type="button" class="btn btn-primary" class="btn btn-primary">Cancel</button>
             </div>
-
-            <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
-            </div>
         </div>
+                    <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
+            </div>
     `
-    }
-    async submitPostForm(event) {
-        let testMode = false;
-        event.preventDefault();
-        const formTarget = event.target;
-
-        if (formTarget.checkValidity()) {
-
-            //Post releated inputs
-            const titleInput = formTarget.querySelector('#titleInput');
-            const title = titleInput ? titleInput.value : false;
-
-            const bodyInput = formTarget.querySelector('#textInput');
-            const body = bodyInput ? bodyInput.value : false;
-
-            const idInput = formTarget.querySelector('#postID');
-            const id = idInput ? Number(idInput.value) : false;
-
-            const imageUrlInput = formTarget.querySelector('#imageUrlInput');
-            const imageUrl = imageUrlInput ? imageUrlInput.value : false;
-            const imageAlt = imageUrlInput ? 'User uploaded post image' : false;
-
-            if(testMode){console.log("title:", title, "body:", body, "imageUrl:","id",id, "image",imageUrl);}
-            this.clearWarning()
-
-            let data = {}
-            let errorMessage = ""
-
-            // is valid post
-            if(body){
-                data.title=title
-                data.body=body
-                data.tags=tagsObject.tags
-                data.media={
-                    'url':imageUrl,
-                    'alt':imageAlt,
-                }
-            }
-            if(formTarget.classList.contains('comment')){
-                const response = await api.call(data,api.postsEndpoint,api.postApi,`/${id}/comment`)
-                if(!response.ok){
-                    errorMessage=await api.getErrorJson(response,'comment post')
-                }
-            }else if(formTarget.classList.contains('edit-mode')){
-                const response = await api.call(data,api.postsEndpoint,api.putApi,"/"+id)
-                if(response.ok){
-                    this.updatePosts()
-                    this.clearForm()
-                }else{
-                    errorMessage=await api.getErrorJson(response,'edit post')
-                }
-            }else{
-                const response = await api.call(data,api.postsEndpoint,api.postApi)
-                if(response.ok){
-                    this.updatePosts()
-                    this.clearForm()
-                }else{
-                    errorMessage=await api.getErrorJson(response,'create post')
-                }
-            }
-            if(errorMessage!=""){
-                errorMessageText.innerText=errorMessage;
-                errorMessageText.classList.remove('d-none')
-            }
-        }else{
-            if(testMode){console.log("failed validation")}
-        }
     }
 }

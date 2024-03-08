@@ -8,6 +8,7 @@ export const api = {
     'postsEndpoint' : '/social/posts',
     'profileEndPoint' : '/social/profiles',
     'searchEndpoint' : '/social/posts/search?q=',
+    'allPostDetails':'_author=true&_comments=true&_reactions=true',
     'getApi' : 'GET',
     'postApi' : 'POST',
     'deleteApi' : 'DELETE',

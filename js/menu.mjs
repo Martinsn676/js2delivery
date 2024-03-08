@@ -1,6 +1,7 @@
 // menus.mjs
 import { getUserName } from "./global.mjs";
 import { signOut } from "./global.mjs";
+import { formHandler } from "./formHandler.mjs";
 
 const noUrl = '#'
 const currentPath = window.location.pathname.toLowerCase();
@@ -11,8 +12,8 @@ const tagsObject = new tagImport.default();
 
 const PostImport = await import("./loadPosts.mjs");
 const Post = new PostImport.default();
-const PostFormImport = await import("./postForms.mjs");
-const PostForm = new PostFormImport.default();
+
+
 export default class Menu {
     constructor(){
         this.pcItems=[
@@ -88,8 +89,6 @@ export default class Menu {
         document.getElementById('mobile-form').classList.toggle('form-hidden')
     }
     async addMenus (){
-
-
         document.getElementById('nav-menu').innerHTML =`
             <ul class="col list-unstyled hide-mb">
                 ${this.addItems(this.pcItems)}
@@ -103,12 +102,11 @@ export default class Menu {
                 ${this.addItems(this.topItems)}
             </ul>
             <form id="mobile-form" class="form-container form-hidden blue-buttons ">
-                ${PostForm.postTemplate()}
             </form>`
         const filterMenu = document.getElementById('filter-menu')
         if(filterMenu){
             document.getElementById('filter-menu').innerHTML=`        
-                <div class="col-6 ">
+                <div class="col-6">
                 <input id="searchField" type="text" class="form-control border-primary text-left rounded-1"
                     placeholder="Themes, feelings, places ... ">
                 </input>
@@ -121,8 +119,7 @@ export default class Menu {
                 </select>
                 </div>`
         }
-        //Add mobile form
-        document.getElementById('mobile-form').innerHTML=PostForm.postTemplate()
+
 
         //Add search functions
         const searchField = document.querySelector('#searchField');
@@ -130,7 +127,6 @@ export default class Menu {
             searchField.addEventListener('keyup', (event) => {
                 if (event.key === 'Enter') {
                     // Execute your search logic here
-console.log(Post)
                     console.log('Search query:', event.target.value);
                     Post.updatePosts(event.target.value)
                 }
@@ -138,20 +134,18 @@ console.log(Post)
 
         }
 
+        //Add mobile form
 
-        document.getElementById('post-form').innerHTML=PostForm.postTemplate()
-        PostForm.container = document.getElementById('post-form')
-        PostForm.templateFunctions()
-        PostForm.container.addEventListener('submit', (event) => PostForm.submitPostForm(event));
-        const imageInput = document.querySelector('#sideMenu #imageUrlInput')
-        imageInput.addEventListener('change',()=>PostForm.updateImagePreview(event))
-        const toggleFormbutton = document.querySelector('#bottom-menu .toggle-post-button')
+        formHandler.addForm(document.getElementById('post-form'))
+        //formHandler.addForm(document.getElementById('mobile-form'))
+
+
         const signOutButton = document.getElementById('signOutButton')
         signOutButton.addEventListener('click',signOut)
-        toggleFormbutton.addEventListener('click',()=>this.toggleMobileForm())
-        tagsObject.addTagsButton = document.querySelector("#sideMenu #add-tags")
+
+        // tagsObject.addTagsButton = document.querySelector("#sideMenu #add-tags")
         
-        tagsObject.tagInputs = document.querySelectorAll('.tagInput')
-        tagsObject.addTagsButton.addEventListener('click',(event)=>tagsObject.addTag(event))
+        // tagsObject.tagInputs = document.querySelectorAll('.tagInput')
+        // tagsObject.addTagsButton.addEventListener('click',(event)=>tagsObject.addTag(event))
     }
 }

@@ -17,9 +17,7 @@ export default class Modal {
     }
     addFunctions(){
         this.modalBackground.addEventListener('click',()=>{
-            // Clear the end of the URL
             window.history.pushState({}, '', 'index.html');
-            console.log("hide modal")
             this.modalContainer.classList.add('hide-modal')
         })
     }
