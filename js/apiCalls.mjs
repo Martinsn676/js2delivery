@@ -9,6 +9,7 @@ export const api = {
     'profileEndPoint' : '/social/profiles',
     'searchEndpoint' : '/social/posts/search?q=',
     'allPostDetails':'_author=true&_comments=true&_reactions=true',
+    'allProfileDetails':'_following=true&_followers=true&_posts=true',
     'getApi' : 'GET',
     'postApi' : 'POST',
     'deleteApi' : 'DELETE',
@@ -18,7 +19,7 @@ export const api = {
     * @param {any} data String for search, number to target post, object to post forms
     * @param {string} endPoint use the variable that gives the correct endpoint (located in apiCalls.js)
     * @param {string} method the Method needed
-    * @param {array} endUrl url string to add
+    * @param {array} endUrl url string to add after ? 
     * @returns {response}
     */
     async call(data,endPoint,method,endUrl) {
@@ -30,7 +31,7 @@ export const api = {
         method = method ? method : "GET"
         data = data ? data : ""
         if(endPoint===api.searchEndpoint){
-            url = data.length>0 ? `${url+data}&`:`${this.baseUrl+this.postsEndpoint}?` 
+            url = data.length>0 ? `${url+data}&${endUrl}`:`${this.baseUrl+this.postsEndpoint}?` 
         }else{
             url = endUrl ? `${url}?${endUrl}` : url;
         }
@@ -52,6 +53,12 @@ export const api = {
         const response = await this.fetchApi(url, postData)
         return response
     },
+    /**
+     * Fetch the api
+     * @param {string} url created in call()
+     * @param {object} postData created in call()
+     * @returns response
+     */
     async fetchApi(url, postData){
         try {
             console.log("Fetching:",url, postData)
@@ -63,6 +70,12 @@ export const api = {
         }
 
     },
+    /**
+     * 
+     * @param {respons} respons of the api call
+     * @param {string} origin manual text to explain action
+     * @returns 
+     */
     async getErrorJson(respons,origin){
         const json = await respons.json()
         const errors = json.errors

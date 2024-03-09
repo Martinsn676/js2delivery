@@ -56,3 +56,10 @@
     height: auto;  
   }
 }
+
+.icon-button.red-icon,#delete-button{
+  background-color: #dc3545; /* Red */
+}
+.icon-button.red-icon:hover{
+  background-color: #ac2331; /* Red */
+}

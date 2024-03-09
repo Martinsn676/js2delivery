@@ -3,7 +3,7 @@ const LocalImport = await import("./localSave.mjs");
 const Local = new LocalImport.default();
 
 /**
-* Get the username of current user from LocalStorage
+* Get the username of current user from LocalStorage, created during signin
 * @returns Localsave username
 */
 function getUserName(){
@@ -11,7 +11,7 @@ function getUserName(){
     return userName
 }
 /**
- * 
+ * Get the param from Url or return false
  * @param {string} findElement string text to look for in Url
  * @returns return param or False
  */

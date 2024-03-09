@@ -3,20 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log in page</title>
+    <title>Profile page on Social Media</title>
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/favicon/site.webmanifest">
+    
+  <!-- Favicon links -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../files/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../files/favicon-16x16.png">
+   
+    <!-- Script -->
     <script type="module" defer src="./profilePage.mjs"></script>
-
+    
+    <!-- Page-specific metadata -->
+    <meta name="description" content="See a user profile or change your own">
+    <meta name="keywords" content="account, banner, avatar, images">
 </head>
-
-<body class="text-bg-light">
-<!-- Top menu for mobile -->
+<body>
+<!-- add the top menu for mobile -->
 <header id="top-section" class="fixed-top col-12 col-lg-10">
 </header>
 <main class="container-fluid">
@@ -36,17 +42,15 @@
       </div>
     </section>
     <section class="col flex-column">
-      <div id="modal" class="hide-modal">
-        <div class="modal-display"></div>
+      <div id="modal" class="hide-modal"></div>
+      <div id="edit-modal" class="hide-modal"></div>
       <div class="modal-back-ground"></div>
-      </div>
-      <section id="profile-page" class="col">
-      </section>
+      <!-- add profile info here -->
+      <section id="profile-page" class="col"></section>
       <div id="searchResultContainer"></div>
       <!-- add posts to feed -->
       <div id="feedContainer" class="flex-row flex-wrap p-3"></div>
-      <button id="show-more-posts">Show more</button>
-      </section>
+      <button id="show-more-posts" class="d-none">Show more</button>
     </section>
   </div>
 </main>

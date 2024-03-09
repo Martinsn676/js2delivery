@@ -1,7 +1,7 @@
 
-import { api } from "./apiCalls.mjs";
+import { api } from "../js/apiCalls.mjs";
 
-const tagImport = await import("./tags.mjs");
+const tagImport = await import("../js/tags.mjs");
 const tagsObject = new tagImport.default();
 let instance = null;
 
@@ -166,7 +166,7 @@ export default class PostForm {
         const formTarget = event.target;
 
         if (formTarget.checkValidity()) {
-            const PostImport = await import("./loadPosts.mjs");
+            const PostImport = await import("../js/loadPosts.mjs");
             const Post = new PostImport.default();
             //Post releated inputs
             const titleInput = formTarget.querySelector('#titleInput');
@@ -198,12 +198,7 @@ export default class PostForm {
                     'alt':imageAlt,
                 }
             }
-            if(formTarget.classList.contains('comment')){
-                const response = await api.call(data,api.postsEndpoint+`/${id}/comment`,api.postApi)
-                if(!response.ok){
-                    errorMessage=await api.getErrorJson(response,'comment post')
-                }
-            }else if(formTarget.classList.contains('edit-mode')){
+            if(formTarget.classList.contains('edit-mode')){
                 const response = await api.call(data,api.postsEndpoint+"/"+id,api.putApi)
                 if(response.ok){
                     Post.updatePosts()
@@ -229,3 +224,9 @@ export default class PostForm {
         }
     }
 }
+// if(formTarget.classList.contains('comment')){
+//                 const response = await api.call(data,api.postsEndpoint+`/${id}/comment`,api.postApi)
+//                 if(!response.ok){
+//                     errorMessage=await api.getErrorJson(response,'comment post')
+//                 }
+//             }else 

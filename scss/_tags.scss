@@ -1,0 +1,49 @@
+// Input group container
+#tags-input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+    // Input field
+    #tagInput {
+    flex: 1;
+    padding: 8px;
+    margin-bottom: 0;
+    border: 1px solid #ced4da;
+    border-radius: 5px 0 0 5px;
+    }
+    #add-tags {
+      padding: 8px 15px;
+      border-left: none;
+      border-radius: 0 5px 5px 0;
+        margin-left: 0px;
+      cursor: pointer;
+    }
+}
+
+.tags-list,.tags-container{
+    display: flex;
+    flex-wrap: wrap;
+    li{
+        font-size: 12px;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+        margin: 2px;
+        color: white;
+        font-weight: bold;
+        background-color:var(--button-color) ;
+        min-width:25px;
+        text-align: center;
+        cursor: pointer;
+        border: 1px solid #0056b3;
+    }
+    li:hover{
+      background-color: var(--button-color-hover);
+    }
+    li:active{
+      background-color: var(--button-color-active);
+    }
+}
+#textInput{
+  resize: vertical; /* Allow vertical resizing only */
+}

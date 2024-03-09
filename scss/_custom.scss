@@ -16,6 +16,14 @@ main{
     }
 
 }
+body{
+    background-color: #f0f0f0;
+}
+#show-more-posts{
+    max-width: 200px;
+    margin: 0 auto 50px auto;
+
+}
 // Use the CSS variables within SCSS
 #sideMenuContainer{
     @media only screen and (min-width:500px){ 
@@ -75,7 +83,7 @@ main{
     background-color: white;
     width: 100vw;
     z-index: 100;
-    ul{
+    .nav-menu{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -88,6 +96,7 @@ main{
             display: none;
         }
     }
+    
 }
 #top-section{
     position: fixed;
@@ -127,5 +136,5 @@ main{
 
 #filter-menu{
     padding: 40px 0 20px;
-    background-color: white;
+
 }

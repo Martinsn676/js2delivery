@@ -16,33 +16,39 @@ const Post = new PostImport.default();
 
 export default class Menu {
     constructor(){
+        //Not the easiest way, but practice for building my own backend for handling website design
         this.pcItems=[
         ['<div class="main-logo"><img src="../files/logoWide.png"></div>','','','col-6'],
-        [`bi bi-house`,'Home','../feed/index.html','button'],
-        ['bi bi-instagram', 'Explore','../feed/index.html','button'],
-        ['bi bi-play-circle', 'Videos',noUrl,'button'],
-        ['bi bi-chat', 'Messages',noUrl,'button'],
-        ['bi bi-person', 'Profiles','../profile/allProfiles.html','button'],
-        ['bi bi-bell', 'Notifications',noUrl,'button'],
-        ['bi bi-gear', 'Settings',noUrl,'button'],
+        [`house`,'Home','../feed/index.html','button'],
+        ['instagram', 'Explore','../feed/index.html','button'],
+        ['play-circle', 'Videos',noUrl,'button'],
+        ['chat', 'Messages',noUrl,'button'],
+        ['person', 'Profiles','../profile/allProfiles.html','button'],
+        ['bell', 'Notifications',noUrl,'button'],
+        ['gear', 'Settings',noUrl,'button'],
         ['',`Logged in as ${getUserName()}`,`../profile/index.html?user=${getUserName()}`,'mt-4',],
-        ['bi bi-box-arrow-in-left', 'Log out','signOutButton','button'],
+        ['box-arrow-in-left', 'Log out','signOutButton','button'],
         
         ]
         //text left to be used as helping tool or something
         this.bottomItems=[
-            [`bi bi-house`,'Home','../feed/index.html'],
-            ['bi bi-instagram', 'Explore','../feed/index.html'],
-            ['bi bi-play-circle', 'Videos',noUrl],
-            ['bi bi-chat', 'Messages',noUrl],
-            ['bi bi-plus-circle', 'Add post',noUrl,'toggle-post-button'],
+            [`house`,'Home','../feed/index.html'],
+            ['instagram', 'Explore','../feed/index.html'],
+            ['play-circle', 'Videos',noUrl],
+            ['chat', 'Messages',noUrl],
+            ['plus-circle', 'Add post','toggle-post-button','button'],
         ],
         this.topItems=[
-            ['bi bi-search', 'Explore','search()'],
+            ['search', 'Explore','search()'],
             ['<div class="main-logo"><img src="../files/logoWide.png"></div>', 'Videos',noUrl,'col-6'],
-            ['bi bi-bell', 'Notifications'],
+            ['bell', 'Notifications'],
         ]
     }
+    /**
+     * Dynamically creates the menu items
+     * @param {Array} items Picked from the ones created in constructor
+     * @returns html of the menu list
+     */
     addItems(items){
         let menuItems = ""
         items.forEach(item => {
@@ -50,6 +56,11 @@ export default class Menu {
         });
         return menuItems
     }
+    /**
+     * Calculates and creates the invdividual list item
+     * @param {Array} array The array of a single menu item
+     * @returns single html list item
+     */
     createMenu([icon,text,action,addClasses]){
         action = action ? action : '#';
         addClasses = addClasses ? addClasses : '';
@@ -60,17 +71,18 @@ export default class Menu {
         let type1 = "";
         let type2 = "";
         let display = "";
-
+        //Check if url or url alternative
         if(action[0]!="." && action[0]!="#"){
-            //if button, add id for targeting eventlistener
-            type1 = `<button class="nav-link icon-button" id="${action}">`
+            //if button, add class for targeting eventlistener
+            type1 = `<button class="nav-link icon-button ${action}">`
             type2 = `</button>`
         }else{
             type1 = `<a class="nav-link icon-button" href="${action}">`
             type2 = `</a>`
         }
+        //check if a special html object
         if(icon[0]!='<'){
-            display = `<i class="${icon} ${size}"></i>`
+            display = `<i class="bi bi-${icon} ${size}"></i>`
         }else{
             type1 = ""
             type1 = ""
@@ -84,21 +96,26 @@ export default class Menu {
                 ${type2}
             </li>`;
     }
-
+    /**
+     * Toggle the mobile form display on and off
+     */
     toggleMobileForm(){
         document.getElementById('mobile-form').classList.toggle('form-hidden')
     }
+    /**
+     * Adds all the menus upon load
+     */
     async addMenus (){
         document.getElementById('nav-menu').innerHTML =`
             <ul class="col list-unstyled hide-mb">
                 ${this.addItems(this.pcItems)}
             </ul>`
         document.getElementById('bottom-menu').innerHTML = `
-            <ul class="justify-content-between hide-pc">
+            <ul class="nav-menu hide-pc">
                 ${this.addItems(this.bottomItems)}
             </ul>`
         document.getElementById('top-section').innerHTML=`
-            <ul class="justify-content-between hide-pc">
+            <ul class="nav-menu hide-pc">
                 ${this.addItems(this.topItems)}
             </ul>
             <form id="mobile-form" class="form-container form-hidden blue-buttons ">
@@ -119,8 +136,6 @@ export default class Menu {
                 </select>
                 </div>`
         }
-
-
         //Add search functions
         const searchField = document.querySelector('#searchField');
         if(searchField){
@@ -128,24 +143,24 @@ export default class Menu {
                 if (event.key === 'Enter') {
                     // Execute your search logic here
                     console.log('Search query:', event.target.value);
-                    Post.updatePosts(event.target.value)
+                    Post.updatePosts(false,event.target.value)
                 }
             });
 
         }
+        //add pc form
+        await formHandler.addForm(document.getElementById('post-form'))
 
         //Add mobile form
+        const mobileForm = document.getElementById('mobile-form')   
+        await formHandler.addForm(mobileForm)
+        const mbPostFormToggle =  document.querySelector('.toggle-post-button')
+        mbPostFormToggle.addEventListener('click',()=>{
+            mobileForm.classList.toggle('form-hidden')
+        })
 
-        formHandler.addForm(document.getElementById('post-form'))
-        //formHandler.addForm(document.getElementById('mobile-form'))
-
-
-        const signOutButton = document.getElementById('signOutButton')
+        //add functions to signoutbutton
+        const signOutButton = document.querySelector('.signOutButton')
         signOutButton.addEventListener('click',signOut)
-
-        // tagsObject.addTagsButton = document.querySelector("#sideMenu #add-tags")
-        
-        // tagsObject.tagInputs = document.querySelectorAll('.tagInput')
-        // tagsObject.addTagsButton.addEventListener('click',(event)=>tagsObject.addTag(event))
     }
 }

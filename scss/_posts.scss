@@ -15,37 +15,32 @@
   @media (min-width: 1000px) {
       width: calc(25% - var(--media-post-padding));
   }
-
 }
 .media-post-container{
   padding:5px;
   width: 100%;
-
-  &.post-hidden{
+  &.post-hidden,#edit-post-nav{
     display: none;
   }
-
   .media-post{
+
     height: 440px;
-    border: 1px solid #ccc;
+    background-color: white;
     border-radius: 5px;
     padding: 20px;
     margin-bottom: 20px;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     padding: 5px;
     cursor: pointer;
-    @media only screen and (max-width:600px){ 
-      //height: auto;
-    }
-    .only-modal{
-      display: none;
-    }
+#mobile-comments{
+  display: none;
+}
     .post-author{
       color: grey;
       text-decoration:none;
     }
     .text-box{
-                padding-top: 20px;
+      padding-top: 20px;
       font-size: 1rem;
       height: 150px;
       overflow: hidden;
@@ -56,14 +51,11 @@
         margin-bottom: 10px;
       }
     }
-    .left-side{
-        width: 100%;
-    }
     .blur {
       background: linear-gradient(to top, white 0%, transparent 100%);
       height: 60px;
       width: 100%;
-      margin-top: -60px;
+      margin-top: -50px;
     }
     .image-container{
         position: relative;
@@ -73,118 +65,163 @@
       img{
         max-width: 100%;
         height: auto;
-        border-radius: 10px;
-      }
-      #edit-post-nav{
-        position: absolute;
-        right: 0;
-        top:0
+
       }
     }
-
   }
 
 //To handle post in mboile view and expanding
   &.expand .media-post{
+@media (max-width: 500px) {
     height: auto;
+    #edit-post-nav{
+      display: block;
+    }
     .text-box{
       height: auto;
     }
     .image-container{
       height: auto;
       overflow: visible;
+      img{
+        border-radius: 10px;
+      }
     }
     .blur{
       display: none;
     }
+    #mobile-comments{display: block;}
+  }
   }
 }
 /* ===== Modal ===== */
 
-#modal{
 
-  @media only screen and (max-width:500px){ 
-    display: none;
+
+
+
+#modal .modal-display{
+    #edit-post-nav{
+      display: block;
+    }
+  width: 80vw;
+  height: 80vh;
+  padding: 0;
+  .media-post{
+    height: 100%;
+    .left-side,.right-side{
+      width: 50%;
+      padding: 20px;
+    }
   }
-
-
-    .rigth-side{
-        width: 300px;
-        padding: 10px;
-    }
-    .left-side{
-        width: 300px;
-    }
-    #modal-image-zoom{
-      position: fixed;
+  .media-post-container{
+    position: relative;
+    padding: 0;
+    height: 100%;
+  }
+} 
+#modal .left-side{
+  .modal-image-container{
+    position: relative;
+    width: 100%;
+    height: 50%;
+    #edit-post-nav{
+      position: absolute;
       top: 0;
-      width: 100%;
-      height: 100%;
-      padding: 40px;
-      margin: -40px;
-      background-color: white;
-      border-radius: 20px;
-      cursor: pointer;
-      span{
-        opacity: 0.5;
-      }
-      img{
-        max-width: 100%;
-        max-height: 100%;
-        border-radius: 20px;
-      }
+      right: 0;
     }
-    .post-comment{
+    img{
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}
+
+
+  .comments-container {
+    margin-top: 20px;
+    width: 100%;
+    overflow-y: auto; /* Enable vertical scrollbar */
+    max-height: 70%; /* Take full height of fixed container */
+    /* Scrollbar styling */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #ccc #fff; /* thumb color, track color */
+    &::-webkit-scrollbar {
+      width: 10px; /* Width of the scrollbar */
+      
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #ccc; /* Color of the scrollbar thumb */
+      border-radius: 5px; /* Border radius of the scrollbar thumb */
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: blue; /* Color of the scrollbar track */
+
+    }
+
+    .post-comment {
+      position: relative;
       border: 1px solid #ccc;
       border-radius: 5px;
       padding: 5px;
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-      .author{
+      margin: 3px;
+
+      .author {
         font-size: 1.2rem;
       }
-      .text{
+
+      .text {
         padding-left: 5px;
       }
-    }
-    .post-reactions{
-      &.active{
+
+      .delete-comment-button {
+        cursor: pointer;
+        position: absolute;
+        right: 0px;
+        border: none;
         color: red;
+        background-color: transparent;
       }
     }
-    .form-container{
-      margin-top: 10px;
-    }
-    .media-post-container{
-      padding: 0;
-      .media-post{
-        height: auto;
-        background-color: white;
-        border-radius: 20px;
-        .delete-comment-button{
-          cursor: pointer;
-          position: absolute;
-          right: 20px;
-          border: none;
-          color: red;
-          background-color: rgba($color: #000000, $alpha: 0);
-        }
-      }
-    
+  
+
+  .form-container {
+    margin-top: 20px;
   }
-//To transfrom post into modal display
-
-.text-box{
-    height: auto;
-    overflow: visible;
-}
-.blur{
-    display: none;
-}
-.image-container{
-    overflow: visible;
-    height: auto;
 }
 
-} 
 
 
+#modal  #modal-image-zoom{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  span{
+    opacity: 0.5;
+  }
+  img{
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 20px;
+  }
+}
+
+
+// .text-box{
+//     height: auto;
+//     overflow: visible;
+// }
+// .blur{
+//     display: none;
+// }
+// .image-container{
+//     overflow: visible;
+//     height: auto;
+// }

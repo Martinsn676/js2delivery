@@ -1,4 +1,4 @@
-export default class Menu {
+export default class Tag {
     constructor(){
         this.tags=[]
     }
@@ -20,8 +20,6 @@ export default class Menu {
             }
             this.update(newArray)
         }
-
-
     }
     //Update tags container
     update(tags){
@@ -40,14 +38,12 @@ export default class Menu {
                 });
             });
         })
-
     }
     addTag(event){
         event.preventDefault()
         const inputField = event.target.parentElement.querySelector('#tagInput')
         const value = inputField.value
         inputField.value=""
-    
         this.toggleTag(value)
     }
 }

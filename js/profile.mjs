@@ -4,7 +4,7 @@ import { formHandler } from "./formHandler.mjs";
 let modalObject;
 
 const Modal = await import("./modal.mjs");
-modalObject = new Modal.default();
+const editModal = new Modal.default('edit-modal');
 
 
 export default class Profile {
@@ -12,18 +12,32 @@ export default class Profile {
         this.profilePage =document.getElementById('profile-page')
         this.userName = getUrlParam('user') ? getUrlParam('user') : getUserName()
     }
+    /**
+     * Render profile page of user based on indicated in url
+     */
     async render(){
-        const respons = await api.call('',api.profileEndPoint+'/'+this.userName,api.getApi)
-        const json = await respons.json()    
-        this.userData = json.data
-        this.loggedInUser = getUserName()
-        console.log(this.userData)
-        this.profilePage.innerHTML=this.template(this.userData)
-        const postRespons = await api.call('',api.profileEndPoint+"/"+this.userName+"/posts",api.getApi, api.allPostDetails)
-        const jsonPosts = await postRespons.json()
-        formHandler.update(jsonPosts.data)
-        this.addFunctions()
+        const respons = await api.call('',api.profileEndPoint+'/'+this.userName,api.getApi,api.allProfileDetails)
+        if(respons.ok){
+            const json = await respons.json()    
+            this.userData = json.data
+console.log(this.userData)
+            this.loggedInUser = getUserName()
+            this.profilePage.innerHTML=this.template(this.userData)
+            const postRespons = await api.call('',api.profileEndPoint+"/"+this.userName+"/posts",api.getApi, api.allPostDetails)
+            const jsonPosts = await postRespons.json()
+            formHandler.update(jsonPosts.data,this.userName)
+            // formHandler.update(this.userData.posts,this.userName)
+            this.addFunctions()
+        }else{
+            console.warn('profile not found')
+            window.location.href="/profile/index.html"
+        }
     }
+    /**
+     * Creates template with profile info
+     * @param {respons} respons from profile api call 
+     * @returns 
+     */
     template({avatar,banner,bio,email,name}){
         return `
     <div class="flex-column">
@@ -35,7 +49,6 @@ export default class Profile {
         </div>
         <div class="flex-row">
             <div class="left-side col-6">
-
                 <div id="image-container" class="">
                     <button id="" class="edit-button icon-button d-none">
                         <i class="bi bi-pencil-fill"></i>
@@ -55,7 +68,11 @@ export default class Profile {
         </div>
     </div>`
     }
+    /**
+     * Add functions to the profile page
+     */
     addFunctions(){
+console.log("this.loggedInUser===this.userData.name",this.loggedInUser===this.userData.name)
         if(this.loggedInUser===this.userData.name){
             const bannerImage = document.querySelector('#banner-container .edit-button')
             bannerImage.classList.remove('d-none')
@@ -75,19 +92,39 @@ export default class Profile {
         }
 
     }
+    /**
+     * 
+     * @param {string} editing can be either bio/banner/avatar
+     * @param {string} title Custom title to show as label
+     * @param {string} buttonText Custom text to show on button
+     */
     async editProfile(editing,title,buttonText){
-        modalObject.modalDisplay.innerHTML=this.changeImageForm(title,buttonText)
+        let inputType = 'input'
+        let inputField = 'input'
         if(editing==='bio'){
-            let bioText = document.querySelector('#profile-page #bio-text').innerText
-            bioText = bioText != 'null' ? bioText : ''
-            modalObject.modalDisplay.querySelector('input').value=bioText
+            inputType = 'textarea'
         }
-        let changeCount = 0
-        const inputField = modalObject.modalDisplay.querySelector('input')
-        inputField.addEventListener('click',()=>changeCount++)
-        modalObject.show()
-        const submitButton = modalObject.modalDisplay.querySelector('button')
-        submitButton.addEventListener('click',async ()=>{
+        editModal.modalDisplay.innerHTML=await this.editFormHTML(title,buttonText,inputType)
+        let editText = ""
+inputField = editModal.modalDisplay.querySelector('#edit-form-input')
+        if(editing==='bio'){
+            editText = document.querySelector('#profile-page #bio-text').innerText
+            editText = editText != 'null' ? editText : ''
+            inputField.value = editText
+        }
+        console.log(inputField)
+        const submitButton = editModal.modalDisplay.querySelector('button')
+        editModal.show()
+        inputField.addEventListener('keyup',()=>checkForm());
+        checkForm()
+        function checkForm(){
+            if(inputField.value==="" || inputField.value===editText){
+                submitButton.disabled=true
+            }else{
+                submitButton.disabled=false
+            }
+        }
+        submitButton.addEventListener('click',async (event)=>{
             event.preventDefault()
             const inputValue = inputField.value
             if(inputValue!=""){
@@ -117,24 +154,39 @@ export default class Profile {
                     errorBox.innerText=errorMessage
                     form.classList.add('is-invalid')
                 }else{
-                    modalObject.hide()
+                    formHandler.hideModal()
                     this.render()
                 }
             }
         })
     }
-    changeImageForm(title,buttonText){
+    editFormHTML(title,buttonText,inputType){
         return`
             <form id="edit-profile-form" class="form-container flex-column">    
                 <div class="form-part">
                     <label for="imageUrl" class="form-label mb-2">${title}</label>
+                    ${inputType==='input' ?
+                    `
                     <input required 
+                        id="edit-form-input"
                         type="text" 
                         class="form-control clearable" 
-                        id="imageUrlInput" 
-                        name="imageUrl" 
+                        name="editInput" 
                         value=""
                     />
+                    `
+                    :
+                    `
+                    <textarea  required 
+                        id="edit-form-input"
+                        type="text" 
+                        class="form-control clearable" 
+                        name="editInput" 
+                        value=""
+                    ></textarea >
+                    `
+                    }
+
                     <div id="error-box" class="invalid-feedback"></div>
                 </div>
                 <button type="submit">${buttonText}</button>

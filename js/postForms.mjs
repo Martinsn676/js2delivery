@@ -14,11 +14,14 @@ export default class PostForm {
         this.titleInput = target.querySelector('#titleInput');
         this.bodyInput = target.querySelector('#textInput');
         this.idInput = target.querySelector('#postID');
+        this.tagsContainer = target.querySelector('.tags-list');
         this.addFunctions()
     }
+    /**
+     * Clear form for all inputs
+     */
     clearForm(){
-        const formContainer = document.querySelector('#post-form')
-        const inputs = formContainer.querySelectorAll('.clearable')
+        const inputs = this.container.querySelectorAll('.clearable')
         inputs.forEach(input => {
             input.value=""
         });
@@ -28,45 +31,52 @@ export default class PostForm {
         // this.activateForm('post')
         // this.updateImagePreview('')
     }
+    /**
+     * Add functions to form
+     */
     addFunctions(){
-        this.container.querySelector('#cancel-button').addEventListener('click',()=>{
+        this.container.querySelector('#cancel-button').addEventListener('click',(event)=>{
             event.preventDefault()
-            this.clearForm()
+            formHandler.activateForm('post')
         })
-        this.container.querySelector('#delete-button').addEventListener("click", () => postsObject.deletePost());
+        this.container.querySelector('#delete-button').addEventListener("click",async () =>{
+            await api.call('',`${api.postsEndpoint}/${this.idInput.value}`,api.deleteApi)
+            formHandler.update()
+        });
         this.container.addEventListener('submit', (event) => this.submitPostForm(event));
-        this.container.addTagsButton = document.querySelector("#sideMenu #add-tags")
-        
+        this.container.addTagsButton = this.container.querySelector("#add-tags")
         this.container.tagInputs = document.querySelectorAll('.tagInput')
         this.container.addTagsButton.addEventListener('click',(event)=>tagsObject.addTag(event))
         //this.imageInput.addEventListener('change',()=>PostForm.updateImagePreview(event))
     }
+    /**
+     * Submit post form, can be either in normal or edit-mode
+     * @param {event} event 
+     */
     async submitPostForm(event) {
         event.preventDefault();
         if (this.container.checkValidity()) {
+            let tagsArray = []
             const title = this.titleInput ? this.titleInput.value : false;
             const body = this.bodyInput ? this.bodyInput.value : false;
             const id = this.idInput ? Number(this.idInput.value) : false;
             const imageUrl = this.imageInput ? this.imageInput.value : false;
             const imageAlt = this.imageInput ? 'User uploaded post image' : false;
+            const tags = this.tagsContainer.querySelectorAll('li')
+            tags.forEach((tag)=>tagsArray.push(tag.innerText))
+            this.errorMessageText.classList.add('d-none')
+            console.log(tags)
             let errorMessage = ""
-
             let data = {
                 'title':title,
                 'body':body,
-                'tags':tagsObject.tags,
+                'tags':tagsArray,
                 'media':{
                     'url':imageUrl,
                     'alt':imageAlt,
                 }
             }
-
-            if(this.container.classList.contains('comment')){
-                const response = await api.call(data,api.postsEndpoint+`/${id}/comment`,api.postApi)
-                if(!response.ok){
-                    errorMessage=await api.getErrorJson(response,'comment post')
-                }
-            }else if(this.container.classList.contains('edit-mode')){
+            if(this.container.classList.contains('edit-mode')){
                 const response = await api.call(data,api.postsEndpoint+"/"+id,api.putApi)
                 if(response.ok){
                     formHandler.update()
@@ -79,6 +89,8 @@ export default class PostForm {
                 if(response.ok){
                     formHandler.update()
                     formHandler.clearForms()
+                    this.container.classList.add('form-hidden')
+console.log("dfsfgsf")
                 }else{
                     errorMessage=await api.getErrorJson(response,'create post')
                 }
@@ -95,9 +107,10 @@ export default class PostForm {
         this.titleInput.value = title;
         this.bodyInput.value = body;
         this.idInput.value = id;
-
-        tagsObject.update(tags)
-        formHandler.activateForm('edit')
+        let tagsHtml=""
+        tags.forEach((tag)=>tagsHtml+=`<li>${tag}</li>`)
+        this.tagsContainer.innerHTML=tagsHtml
+        formHandler.activateForm('edit-mode')
         // this.updateImagePreview()
         // const imagePreview = document.querySelector('#sideMenu #imagePreview')
         imagePreview.scrollIntoView({ behavior: 'smooth' });
@@ -157,11 +170,11 @@ export default class PostForm {
                 <button id="delete-button" type="button" class="btn btn-primary" class="btn btn-primary">Delete</button>
             </div>
             <div class="button-container only-edit-mode">
-                <button id="cancel-button" type="button" class="btn btn-primary" class="btn btn-primary">Cancel</button>
+                <button id="cancel-button" type="button red-button" class="btn btn-primary" class="btn btn-primary">Cancel</button>
             </div>
         </div>
-                    <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
-            </div>
+        <div id="errorMessageText" class="error-message alert alert-danger d-none text-center">
+        </div>
     `
     }
 }
