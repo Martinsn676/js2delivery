@@ -1,3 +1,18 @@
+/* Define Roboto font using @font-face */
+@font-face {
+  font-family: "Roboto";
+  src: url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+}
+/* Apply Roboto font to elements */
+body {
+  font-family: "Roboto", sans-serif; /* Apply Roboto as the default font for the body */
+}
+
+/* Optionally, you can specify different font weights if needed */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500; /* Apply Roboto bold (700) to headings */
+}
+
 @media (min-width: 1000px) {
   main {
     max-width: 1200px;
@@ -948,10 +963,11 @@ body {
   margin: 3px;
 }
 .comments-container .post-comment .author {
+  opacity: 0.5;
   font-size: 1.2rem;
 }
 .comments-container .post-comment .text {
-  padding-left: 5px;
+  padding: 5px 2px 2px 2px;
 }
 .comments-container .post-comment .delete-comment-button {
   cursor: pointer;

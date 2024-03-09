@@ -20,12 +20,8 @@ export default class Profile {
         if(respons.ok){
             const json = await respons.json()    
             this.userData = json.data
-console.log(this.userData)
             this.loggedInUser = getUserName()
             this.profilePage.innerHTML=this.template(this.userData)
-            const postRespons = await api.call('',api.profileEndPoint+"/"+this.userName+"/posts",api.getApi, api.allPostDetails)
-            const jsonPosts = await postRespons.json()
-            formHandler.update(jsonPosts.data,this.userName)
             // formHandler.update(this.userData.posts,this.userName)
             this.addFunctions()
         }else{
@@ -72,7 +68,6 @@ console.log(this.userData)
      * Add functions to the profile page
      */
     addFunctions(){
-console.log("this.loggedInUser===this.userData.name",this.loggedInUser===this.userData.name)
         if(this.loggedInUser===this.userData.name){
             const bannerImage = document.querySelector('#banner-container .edit-button')
             bannerImage.classList.remove('d-none')
@@ -90,7 +85,6 @@ console.log("this.loggedInUser===this.userData.name",this.loggedInUser===this.us
                 this.editProfile('bio','Change bio text','Submit changes')
             })
         }
-
     }
     /**
      * 
@@ -99,14 +93,14 @@ console.log("this.loggedInUser===this.userData.name",this.loggedInUser===this.us
      * @param {string} buttonText Custom text to show on button
      */
     async editProfile(editing,title,buttonText){
-        let inputType = 'input'
+        let isInput = true
         let inputField = 'input'
         if(editing==='bio'){
-            inputType = 'textarea'
+            inputType = false
         }
-        editModal.modalDisplay.innerHTML=await this.editFormHTML(title,buttonText,inputType)
+        editModal.modalDisplay.innerHTML=await this.editFormHTML(title,buttonText,isInput)
         let editText = ""
-inputField = editModal.modalDisplay.querySelector('#edit-form-input')
+        inputField = editModal.modalDisplay.querySelector('#edit-form-input')
         if(editing==='bio'){
             editText = document.querySelector('#profile-page #bio-text').innerText
             editText = editText != 'null' ? editText : ''
@@ -145,7 +139,6 @@ inputField = editModal.modalDisplay.querySelector('#edit-form-input')
                     return
                 }
                 const response = await api.call(body,api.profileEndPoint+'/'+this.userName,api.putApi)
-                console.log("response",response)
 
                 if(!response.ok){
                     let errorMessage = await api.getErrorJson(response,'update profile images')
@@ -160,12 +153,19 @@ inputField = editModal.modalDisplay.querySelector('#edit-form-input')
             }
         })
     }
-    editFormHTML(title,buttonText,inputType){
+    /**
+     * Create edit form depending on edited object
+     * @param {string} title 
+     * @param {string} buttonText 
+     * @param {string} isInput 
+     * @returns html of the edit form
+     */
+    editFormHTML(title,buttonText,isInput){
         return`
             <form id="edit-profile-form" class="form-container flex-column">    
                 <div class="form-part">
                     <label for="imageUrl" class="form-label mb-2">${title}</label>
-                    ${inputType==='input' ?
+                    ${isInput==='input' ?
                     `
                     <input required 
                         id="edit-form-input"

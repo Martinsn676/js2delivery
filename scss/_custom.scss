@@ -1,5 +1,19 @@
 
+/* Define Roboto font using @font-face */
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+}
 
+/* Apply Roboto font to elements */
+body {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto as the default font for the body */
+}
+
+/* Optionally, you can specify different font weights if needed */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500; /* Apply Roboto bold (700) to headings */
+}
 // Define CSS variables
 
 main{

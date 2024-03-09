@@ -170,11 +170,12 @@
       margin: 3px;
 
       .author {
+        opacity: 0.5;
         font-size: 1.2rem;
       }
 
       .text {
-        padding-left: 5px;
+        padding: 5px 2px 2px 2px;
       }
 
       .delete-comment-button {

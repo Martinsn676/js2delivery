@@ -90,7 +90,6 @@ export default class PostForm {
                     formHandler.update()
                     formHandler.clearForms()
                     this.container.classList.add('form-hidden')
-console.log("dfsfgsf")
                 }else{
                     errorMessage=await api.getErrorJson(response,'create post')
                 }
@@ -101,6 +100,10 @@ console.log("dfsfgsf")
             }
         }
     }
+    /**
+     * Send the post to be edited, this will be sent to both pc and mobile form
+     * @param {array} post 
+     */
     editThis(post) {
         const { media, id, title, body, tags } = post 
         this.imageInput.value = media.url;
@@ -108,13 +111,19 @@ console.log("dfsfgsf")
         this.bodyInput.value = body;
         this.idInput.value = id;
         let tagsHtml=""
-        tags.forEach((tag)=>tagsHtml+=`<li>${tag}</li>`)
+        // tags.forEach((tag)=>tagsHtml+=`<li>${tag}</li>`)
         this.tagsContainer.innerHTML=tagsHtml
         formHandler.activateForm('edit-mode')
+        tagsObject.update(tags)
+        document.querySelector("#sideMenu #post-form").focus();
         // this.updateImagePreview()
         // const imagePreview = document.querySelector('#sideMenu #imagePreview')
         imagePreview.scrollIntoView({ behavior: 'smooth' });
     }
+    /**
+     * Template for universal form
+     * @returns html of the form
+     */
     template(){return `
         <input 
             type="text" 

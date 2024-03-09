@@ -1,4 +1,4 @@
-import { getUserName,getUrlParam  } from "./global.mjs"
+import { getUserName,getUrlParam, signOut,cleanUrl  } from "./global.mjs"
 import { api } from "./apiCalls.mjs"
 import { formHandler } from "./formHandler.mjs";
 
@@ -24,14 +24,10 @@ export default class Post {
         this.postsArray = []
     }
     /**
-     * 
+     * Either adds preloaded posts or get them based on search/tag
      * @param {response} preLoaded In case no new api call is wanted, False if not
      * @param {string} search Search string
      * @param {string} filter Filter for api call
-     * @example 
-     *  updatePosts(false,'dog','tag=dog')
-     *
-     * 
      */
     async updatePosts(preLoaded,search){
         //I try handling the apicall request by getting fedd the string directly or by url.
@@ -46,9 +42,14 @@ export default class Post {
             filter = urlFilter ? `&_tag=${urlFilter}` : filter
             let endPoint = search ? api.searchEndpoint : api.postsEndpoint
             const response = await api.call(search,endPoint , api.getApi, api.allPostDetails+filter);
+
             const json = await response.json();
-            postsArray = json.data
-            console.log(postsArray)
+            if(!response.ok && json.statusCode===401){
+                signOut()
+            }else{
+                postsArray = json.data
+            }
+            
         }else{
             postsArray = preLoaded
             
@@ -72,31 +73,27 @@ export default class Post {
             const inProfilePage = window.location.pathname.endsWith("/profile/index.html");
             if(resetButton){
                 resetButton.addEventListener('click',()=>{
-                    if(inProfilePage){
-                        const userParam = getUserName()
-                        const user = userParam ? "?user="+userParam : ""
-                        this.updatePosts()
-                    }else{
-                        const urlWithoutQueryString = window.location.href.split('?')[0];
-                        window.history.replaceState({}, '', urlWithoutQueryString);
-                    }
-                    this.updatePosts()
+                    cleanUrl()
+                    formHandler.update()
                     document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
                 })
             }           
         }
     }
+    /**
+     * Render the posts with template and hides everything above limit
+     * @param {array} postsArray posts to render
+     * @param {number} limit Optional, choose how many posts, default is calculated
+     */
     async addPosts(postsArray,limit){
-        console.trace()
         const perLineCalc = Math.ceil(feedContainer.clientWidth/220)
         limit = limit ? limit :perLineCalc*4;
         const addAmount = perLineCalc*4
-        console.log("limit",limit,feedContainer.clientWidth)
         const html = await this.createHtml(postsArray,limit)
         feedContainer.innerHTML = ""
         feedContainer.innerHTML = html
+
         const hiddenPostsCount = feedContainer.querySelectorAll('.post-hidden').length
-        // this.container.insertAdjacentHTML("beforeend", html);
         if(hiddenPostsCount>0){
             this.showMore.classList.remove('d-none')
             this.showMore.disabled=false
@@ -114,9 +111,17 @@ export default class Post {
         }
         this.postsArray=postsArray
         this.addFunctions()
-        // PostForm.container=document.getElementById('form-container')
+        //If url contains post id, load it
+        const prevID = getUrlParam('id')
+        if(prevID){
+           this.displayPost(prevID) 
+        }
     }   
-    //Blacklisting to hide 
+    /**
+     * Removes every test and banned url links with poor results, since I assume we were not gonna work with no picture posts
+     * @param {object} post the post to check 
+     * @returns 
+     */
     checkBlackList({ body, media }) {
         for (const banned of this.settings.bannedStarts) {
             if (!media || media.url.startsWith(banned) || body.toLowerCase().startsWith(banned)) {
@@ -125,11 +130,16 @@ export default class Post {
         }
         return false;
     }
+    /**
+     * Used to dynamically create the post html
+     * @param {array} postsArray Array of all posts to createHTML
+     * @param {number} limit Limit used for adding hidden classes
+     * @returns Html with all posts that is not blacklisted
+     */
     async createHtml(postsArray,limit){
         let html = ""
         let count = 0
         postsArray.forEach((post) => {if(!this.checkBlackList(post)){
-            count ++
             const { _count,title,body,created, updated, media, tags, author,id,comments,reactions } = post;
             let editText = "";
             let tagHtml = "";
@@ -138,13 +148,16 @@ export default class Post {
             let reactiosnHtml =""
             let addPostClasses = ""
             let authorString = author.name
-            
+            count ++
+            //Add edited if post is changed after original post
             if (created != updated) {
                 editText = ' (edited)';
             }
+            //Add hidden classes above limit
             if(count>limit){
                 addPostClasses+="post-hidden"
             }
+            //Add the tags
             if (tags) {
                 tags.forEach(tag => {
                     if(tag.length>0){
@@ -153,6 +166,7 @@ export default class Post {
                     }
                 });
             }
+            //Add edit buttons if logged in user owns the post
             if (this.user === author.name) {
                 authorString="You"
                 editButtons = ` 
@@ -162,20 +176,21 @@ export default class Post {
                     </div>
                 `
             }
+            //Add comments if any
             if(comments[0]){
                 for(let i = 0 ; i < comments.length; i++){
                     commentHtml += `
                         <div class="post-comment flex-column">
-                            <span class="author">${comments[i].author.name}</span>
+                            <span class="author">@${comments[i].author.name}</span>
                             <span class="text">${comments[i].body}</span>
                             `
                     if(comments[i].author.name===this.user){
-                        commentHtml+=`<button id="comment-${id}-${comments[i].id}" class="delete-comment-button">delete</button>`
+                        commentHtml+=`<button id="comment-${id}-${comments[i].id}" class="delete-comment-button">Delete</button>`
                     }
                     commentHtml+="</div>"
                 };
             }
-            //           //  someting is wrong
+            //Reactions, but gave up when the api change request was impossible for some reason
             if(reactions[0]){
                 for(let i = 0 ; i < reactions.length; i++){
                     if(reactions[i].reactors && reactions[i].reactors.find(reactor => reactor === this.user)){
@@ -189,10 +204,32 @@ export default class Post {
                         </div>`
                 };
             }
-            //Disabling the reactions
+            //Time display
+
+            let timeDifference = new Date() - new Date(created);
+            let minsDiff = Math.floor(timeDifference / (1000 * 60));
+            let hoursDiff = Math.floor(minsDiff/60);
+            let daysDiff = Math.floor(hoursDiff / 24);
+            hoursDiff = hoursDiff - daysDiff * 24
+
+            let daysText =""
+            let hoursText= ""
+            let minsText = ""
+            if(daysDiff!=0){
+                daysText = daysDiff > 1 ? daysDiff+' days ' : daysDiff+' day '
+            }
+            if(hoursDiff!=0){
+                hoursText = hoursDiff > 1 ? hoursDiff+' hours' : hoursDiff+' hour'
+            }
+            if(daysDiff+hoursDiff===0){
+                minsText = `${minsDiff === 0 ? 'Less than 1 min' : minsDiff === 1 ? '1 min' : `${minsDiff} mins`}`;
+            }
+            const postTime = daysText+hoursText+minsText
+            //Light disabling the reactions, I know I could just comment out, but wanted to keep it easily readable
             reactiosnHtml=""
             const url = media ? media.url : '';
-            const date = new Date(created)
+
+            //Chooste template based on if it is a single post, or several
             if(limit>1){
                 html += `
                 <div id="post-${id}" class="media-post-container ${addPostClasses}">
@@ -202,7 +239,7 @@ export default class Post {
                                 <a class="post-author" href="/profile/index.html?user=${author.name}">@${authorString}</a>
                                     ${editButtons}
                                 <h3 class="title">${title}</h3>
-                                <span>${date.toLocaleDateString()}${editText}</span>
+                                <span>${postTime}${editText}</span>
                                 <p class="fs-6 text">${body}</p>
                             </div>
                             <div class="blur"></div>
@@ -241,7 +278,7 @@ export default class Post {
                                 <a class="post-author" href="/profile/index.html?user=${author.name}">@${authorString}</a>
                                     ${editButtons}
                                 <h3 class="title">${title}</h3>
-                                <span>${date.toLocaleDateString()}${editText}</span>
+                                <span>${postTime}${editText}</span>
                                 <p class="fs-6 text">${body}</p>
                             </div>
                             <div class="modal-image-container mt-2 mb-2 flex-column align">
@@ -273,22 +310,27 @@ export default class Post {
         });
         return html
     }
+    /**
+     * Add the functions to all posts, gotten from class variable, insted of pushed through function
+     */
     addFunctions(){
         let showing = 0
         let banned = 0
         this.postsArray.forEach((post) => {
             const { id } = post;
             const postContainer = document.querySelector(`#feedContainer #post-${id}`);
+            //Count the banned list, goes through the whole array
             if(this.checkBlackList(post)){
                 banned++
             }else{
                 showing++
+                //doing one click here since it was only relevant for posts, not when in modal
                 const mediaPost =  postContainer.querySelector('.media-post')
                 mediaPost.addEventListener("click", (event) =>{
                     if (event.target.tagName === 'A' || event.target.tagName === 'LI' || event.target.tagName === 'I') {
                         return;
                     }
-                        this.displayPost(id)
+                    this.displayPost(id)
                 });
                 this.addButtonClicks(post,postContainer)
             }
@@ -299,7 +341,11 @@ export default class Post {
             console.log("banned",banned)
         console.groupEnd()
     }
-    //Show in modal and add modal only functions
+    /**
+     * Display a post in modal based on id, this can be automatic upon load if included in url
+     * @param {number} findID 
+     * @returns nothing
+     */
     async displayPost(findID){
         findID = Number(findID)
         //Find post from Array
@@ -314,20 +360,22 @@ export default class Post {
             clickedPost.classList.add('expand')
         //or this if in pc version
         }else{
-            let errorMessage
             //Get html, render and show post
             const newHtml = await this.createHtml([post],1)
             modalObject.modalDisplay.innerHTML=newHtml
             modalObject.modalContainer.classList.remove('hide-modal')
             const imgZoomContainer = modalObject.modalContainer.querySelector('#modal-image-zoom')
-            console.log(modalObject.modalContainer)
             const orgImage = modalObject.modalContainer.querySelector('#original-image')
-            console.log("orgImage",orgImage)    
             orgImage.addEventListener('click',()=>imgZoomContainer.classList.toggle('d-none'))
             imgZoomContainer.addEventListener('click',()=>imgZoomContainer.classList.toggle('d-none'))
             this.addButtonClicks(post,modalObject.modalDisplay)
         }
     }
+    /**
+     * Universal eventlisteners for posts (both modal and normal)
+     * @param {array} post the post information
+     * @param {object} target  the location of this single post
+     */
     addButtonClicks(post,target){
 
             //Add listener to form
@@ -380,9 +428,17 @@ export default class Post {
                 });
             }
     }
+    /**
+     * Reload posts with filter
+     * @param {string} filterBy 
+     */
     async searchForTag (filterBy){
         this.updatePosts(false,false,'&_tag='+filterBy)
     }
+    /**
+     * Delete post based on id, then reloads page if successful
+     * @param {number} id 
+     */
     async deletePost(id){
         id = id ? id : Number(PostForm.container.querySelector('#postID').value)
         const response = await api.call("",api.postsEndpoint+"/"+id,api.deleteApi)

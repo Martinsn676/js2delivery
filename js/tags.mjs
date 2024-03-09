@@ -2,6 +2,21 @@ export default class Tag {
     constructor(){
         this.tags=[]
     }
+    /**
+     * Submit tag to be added
+     * @param {event} event 
+     */
+    addTag(event){
+        event.preventDefault()
+        const inputField = event.target.parentElement.querySelector('#tagInput')
+        const value = inputField.value
+        inputField.value=""
+        this.toggleTag(value)
+    }
+    /**
+     * Toggle the tag, then update
+     * @param {string} text 
+     */
     toggleTag(text){
         console.log("toggle tag",text)
         let newArray = []
@@ -21,7 +36,10 @@ export default class Tag {
             this.update(newArray)
         }
     }
-    //Update tags container
+    /**
+     * Update array, either upon edit post or changes
+     * @param {array} tags 
+     */
     update(tags){
         tags = tags ? tags : this.tags
         let html = ''
@@ -39,12 +57,6 @@ export default class Tag {
             });
         })
     }
-    addTag(event){
-        event.preventDefault()
-        const inputField = event.target.parentElement.querySelector('#tagInput')
-        const value = inputField.value
-        inputField.value=""
-        this.toggleTag(value)
-    }
+
 }
 

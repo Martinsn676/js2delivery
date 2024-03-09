@@ -23,7 +23,7 @@ export default class Menu {
         ['instagram', 'Explore','../feed/index.html','button'],
         ['play-circle', 'Videos',noUrl,'button'],
         ['chat', 'Messages',noUrl,'button'],
-        ['person', 'Profiles','../profile/allProfiles.html','button'],
+        ['person', 'Profiles','#','button'],
         ['bell', 'Notifications',noUrl,'button'],
         ['gear', 'Settings',noUrl,'button'],
         ['',`Logged in as ${getUserName()}`,`../profile/index.html?user=${getUserName()}`,'mt-4',],

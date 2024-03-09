@@ -27,5 +27,11 @@ function signOut(){
     localStorage.clear()
     window.location.href = '../index.html'
 }
-
-export {getUserName,getUrlParam,signOut}
+/**
+ * Clears everything after ? in url
+ */
+function cleanUrl (){
+  const urlWithoutQueryString = window.location.href.split('?')[0];
+  window.history.replaceState({}, '', urlWithoutQueryString);
+}
+export {getUserName,getUrlParam,signOut,cleanUrl}
