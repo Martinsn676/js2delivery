@@ -1,0 +1,40 @@
+#modal,#edit-modal{
+    .only-modal{
+        display: flex;
+    }   
+    &.hide-modal,.hide-modal{
+        display: none!important;
+    }
+    .modal-display {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index:101;
+        max-width: 1000px;
+        background-color: white;
+        border: 2px solid #ccc;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        border-radius: 20px;
+    }
+    .modal-back-ground{
+        position: fixed;
+        top:0px;
+        left: 0px;
+        width:100vw;
+        height:100vh;
+        display: block;
+        background-color: grey;
+        opacity: 0.5;
+        z-index: 100;
+    }
+}
+#edit-modal .modal-display{
+    background-color: white;
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    @media (max-width: 500px) {
+        width: calc(80vw - 40px);
+    }
+}

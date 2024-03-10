@@ -1,0 +1,228 @@
+/* Media post container */
+// Media post container
+:root {
+  --media-post-padding: 10px;
+}
+#feedContainer .media-post-container{
+  width: calc(100% - var(--media-post-padding));
+  @media (min-width: 600px) {
+      width: calc(50% - var(--media-post-padding));
+  }
+  @media (min-width: 800px) {
+      width: calc(33.33% - var(--media-post-padding));
+  }
+
+  @media (min-width: 1000px) {
+      width: calc(25% - var(--media-post-padding));
+  }
+}
+.media-post-container{
+  padding:5px;
+  width: 100%;
+  &.post-hidden,#edit-post-nav{
+    display: none;
+  }
+  .media-post{
+
+    height: 440px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    padding: 5px;
+    cursor: pointer;
+#mobile-comments{
+  display: none;
+}
+    .post-author{
+      color: grey;
+      text-decoration:none;
+    }
+    .text-box{
+      padding-top: 20px;
+      font-size: 1rem;
+      height: 150px;
+      overflow: hidden;
+      margin-bottom: 0;
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+    }
+    .blur {
+      background: linear-gradient(to top, white 0%, transparent 100%);
+      height: 60px;
+      width: 100%;
+      margin-top: -50px;
+    }
+    .image-container{
+        position: relative;
+        overflow: hidden;
+        height: 160px;
+        width: 100%;
+      img{
+        max-width: 100%;
+        height: auto;
+
+      }
+    }
+  }
+
+//To handle post in mboile view and expanding
+  &.expand .media-post{
+@media (max-width: 500px) {
+    height: auto;
+    #edit-post-nav{
+      display: block;
+    }
+    .text-box{
+      height: auto;
+    }
+    .image-container{
+      height: auto;
+      overflow: visible;
+      img{
+        border-radius: 10px;
+      }
+    }
+    .blur{
+      display: none;
+    }
+    #mobile-comments{display: block;}
+  }
+  }
+}
+/* ===== Modal ===== */
+
+
+
+
+
+#modal .modal-display{
+    #edit-post-nav{
+      display: block;
+    }
+  width: 80vw;
+  height: 80vh;
+  padding: 0;
+  .media-post{
+    height: 100%;
+    .left-side,.right-side{
+      width: 50%;
+      padding: 20px;
+    }
+  }
+  .media-post-container{
+    position: relative;
+    padding: 0;
+    height: 100%;
+  }
+} 
+#modal .left-side{
+  .modal-image-container{
+    position: relative;
+    width: 100%;
+    height: 50%;
+    #edit-post-nav{
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    img{
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}
+
+
+  .comments-container {
+    margin-top: 20px;
+    width: 100%;
+    overflow-y: auto; /* Enable vertical scrollbar */
+    max-height: 70%; /* Take full height of fixed container */
+    /* Scrollbar styling */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #ccc #fff; /* thumb color, track color */
+    &::-webkit-scrollbar {
+      width: 10px; /* Width of the scrollbar */
+      
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #ccc; /* Color of the scrollbar thumb */
+      border-radius: 5px; /* Border radius of the scrollbar thumb */
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: blue; /* Color of the scrollbar track */
+
+    }
+
+    .post-comment {
+      position: relative;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      margin: 3px;
+
+      .author {
+        opacity: 0.5;
+        font-size: 1.2rem;
+      }
+
+      .text {
+        padding: 5px 2px 2px 2px;
+      }
+
+      .delete-comment-button {
+        cursor: pointer;
+        position: absolute;
+        right: 0px;
+        border: none;
+        color: red;
+        background-color: transparent;
+      }
+    }
+  
+
+  .form-container {
+    margin-top: 20px;
+  }
+}
+
+
+
+#modal  #modal-image-zoom{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  span{
+    opacity: 0.5;
+  }
+  img{
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 20px;
+  }
+}
+
+
+// .text-box{
+//     height: auto;
+//     overflow: visible;
+// }
+// .blur{
+//     display: none;
+// }
+// .image-container{
+//     overflow: visible;
+//     height: auto;
+// }

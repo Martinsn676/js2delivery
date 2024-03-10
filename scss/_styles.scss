@@ -1,0 +1,65 @@
+:root{
+    --button-color : #007bff;
+    --button-color-hover: #0056b3;
+    --button-color-active: #003366;
+    --button-color-disabled: #cccccc;
+}
+
+.icon-button {
+  display: inline-block;
+  padding: 5px 10px;
+//   font-size: 16px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--button-color); /* Blue background color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.blue-buttons button,.blue-button{
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--button-color);
+  color: white;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.blue-buttons button:hover,.blue-button:hover,.icon-button:hover {
+  background-color: var(--button-color-hover);
+}
+.blue-buttons button:active,.blue-button:active {
+  background-color: var(--button-color-active);
+}
+.blue-buttons button:disabled ,.blue-button:disabled  {
+  background-color: var(--button-color-disabled);
+  cursor:default;
+}
+#logInSection{
+  @media (min-width: 600px) {
+    max-width: 50%;
+  }
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+#frontPageLogo{
+  img{
+    width: 100%;
+    height: auto;  
+  }
+}
+
+.icon-button.red-icon,#delete-button{
+  background-color: #dc3545; /* Red */
+}
+.icon-button.red-icon:hover{
+  background-color: #ac2331; /* Red */
+}

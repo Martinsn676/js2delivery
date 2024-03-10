@@ -1,0 +1,77 @@
+.form-container {
+    .valid-feedback, .invalid-feedback {
+        display: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin: 5px;
+    }
+    .form-part {
+      .form-label{
+        padding: 3px;
+      }
+      &.is-valid {
+          .valid-feedback {
+              background-color: #28a745; /* Green */
+              color: white;
+              display: block;
+          }
+      }
+      &.is-invalid {
+          .invalid-feedback {
+              background-color: #dc3545; /* Red */
+              color: white;
+              display: block;
+          }
+      }
+    }
+    .error-message {
+        background-color: #ffc107; /* Yellow */
+        color: black;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin: 5px;
+    }
+}
+
+#mobile-form{
+  @media (min-width: 500px) {
+    display: none!important;
+  }
+}
+
+/* Form input fields */
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container textarea,
+.form-container select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* Ensure padding is included in the width */
+  margin: 4px;
+}
+
+/* Form submit button */
+.form-container button{
+//   width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--button-color);
+  color: white;
+  cursor: pointer;
+  margin: 5px;
+}
+//.form-container button[type="submit"]:hover {
+.form-container button:hover {
+  background-color: var(--button-color-hover);
+}
+.form-container button:active{
+  background-color: var(--button-color-active);
+}
+.form-container button:disabled  {
+  background-color: var(--button-color-disabled);
+  cursor:default;
+}

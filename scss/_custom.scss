@@ -1,0 +1,154 @@
+
+/* Define Roboto font using @font-face */
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+}
+
+/* Apply Roboto font to elements */
+body {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto as the default font for the body */
+}
+
+/* Optionally, you can specify different font weights if needed */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500; /* Apply Roboto bold (700) to headings */
+}
+// Define CSS variables
+
+main{
+    @media (min-width: 1000px) {
+        max-width: 1200px;
+        margin: auto;
+    }
+    @media (max-width: 500px) {
+        padding-bottom: 100px;
+    }
+
+    @media (max-width: 500px) {
+        padding-top: 80px;
+    }
+
+}
+body{
+    background-color: #f0f0f0;
+}
+#show-more-posts{
+    max-width: 200px;
+    margin: 0 auto 50px auto;
+
+}
+// Use the CSS variables within SCSS
+#sideMenuContainer{
+    @media only screen and (min-width:500px){ 
+         padding-right: 20px;
+    }
+
+    #sideMenu {
+        max-width: 200px;
+        padding-right: 20px;
+        position: fixed;
+        top: 0;
+        .iconButton{
+            margin-bottom: 10px;
+        }
+        .main-logo img{
+            width: 100%;
+        }
+        #imagePreview{
+            max-height: 100px;
+            width: auto;
+        }
+        button{
+            white-space: nowrap;
+            margin: 1px;
+        }
+    // Apply a media query using the CSS variable
+    @media (max-width: 500px) {
+        display: none;
+    }
+    }
+}
+
+#post-form,#mobile-form{
+    .only-edit-mode{
+        display: none;
+    }
+    &.edit-mode{
+        .only-edit-mode{
+            display: inline-block;
+        }
+        .only-post-mode{
+            display: none;
+        }
+    }
+    .buttons{
+        .button-container{
+            padding: 5px;
+        }
+    }
+}
+#sideMenu{
+    li{
+        margin-bottom: 5px;
+    }
+}
+#top-section,#bottom-menu{
+    background-color: white;
+    width: 100vw;
+    z-index: 100;
+    .nav-menu{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-left: 0;
+        li{
+            list-style: none;
+            margin: auto auto;
+        }
+        span{
+            display: none;
+        }
+    }
+    
+}
+#top-section{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    ul{
+        margin-top: 0;
+        margin-bottom: 0;
+        .main-logo{
+            img{
+                max-width: 100%;
+                padding: 0;
+            }
+        }
+    }
+
+}
+
+#bottom-menu{
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+}
+
+#mobile-form{
+    height: 100vh;
+    background-color: white;
+    padding: 20px;
+    &.form-hidden{
+        display: none;
+    }
+}
+
+
+#filter-menu{
+    padding: 40px 0 20px;
+
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in page</title>
+    
+    <!-- Metadata -->
+    <meta name="author" content="Martin">
+    <meta name="description" content="A place to share random images and comment">
+    <meta name="keywords" content="animals, trips, social, media, comments, likes">
+    
+    <!-- Link to your main CSS file -->
+    <link rel="stylesheet" href="../css/main.css">
+  
+    <!-- Scripts -->
+    <script type="module" src="js/userForms.mjs"></script>
+    
+    <!-- Favicon links -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../files/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../files/favicon-16x16.png">
+</head>
+
+<body>
+<main class="container">
+<div id="logInSection">
+    <div id="frontPageLogo" class="col-12">
+        <img src="../files/logoWide.png" alt="Logo">
+    </div>
+    <form id="loginForm" class="form-container col-12 mt-3 needs-validation" method="get" novalidate>
+        <div class="form-part mt-3">
+            <label for="login-email" class="form-label">E-mail</label>
+            <input required type="email" id="login-email" class="form-control email-input" name="email" value="">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter a valid email.
+            </div>
+        </div>
+        <div class="form-part mt-3">
+            <label for="login-password" class="form-label">Password</label>
+            <input required type="password" id="login-password" class="password-input form-control" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
+            <div class="invalid-feedback">
+                Password must be at least 8 characters long.
+            </div>
+        </div>
+        <div class="error-message alert alert-danger d-none text-center">
+        </div>
+        <button class="" type="submit">Log in</button>
+    </form>
+
+    <div> ------ or ------ </div>
+    <form id="creatUserForm" class="form-container col-12 needs-validation" method="get" novalidate>
+        <div class="form-part mt-3">
+            <label for="crate-userame" class="form-label">Username</label>
+            <input required type="text" id="crate-userame" class="form-control username-input"  name="username" value="">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter a valid Username.
+            </div>
+        </div>
+        <div class="form-part mt-3">
+            <label for="create-email" class="form-label">E-mail</label>
+            <input required type="email" id="create-email" class="form-control email-input" name="email" title="Please enter a valid email address ending with @noroff.no or @stud.noroff.no" value="">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter a valid email ending with @noroff.no or @stud.noroff.no.
+            </div>
+        </div>
+
+
+        <div class="form-part mt-3">
+            <label for="create-password" class="form-label">Password</label>
+            <input required type="password" id="create-password" class="form-control password-input" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Password must be at least 8 characters long.
+            </div>
+
+        </div>
+        <div class="form-part mt-3">
+            <label for="create-password-2" class="form-label">Repeat password</label>
+            <input required type="password" id="create-password-2" class="form-control password-input-2" name="password2" placeholder="Password"  title="" value="">
+            <div class="valid-feedback">
+                Password matches
+            </div>
+            <div class="invalid-feedback">
+                Password doesn't match
+            </div>
+
+        </div>
+        <div class="error-message alert alert-danger d-none text-center">
+        </div>
+        <button class="" type="submit">Crate User</button>
+    </form>
+</div>
+</main>
+</body>
+</html>
