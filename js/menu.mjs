@@ -74,8 +74,8 @@ export default class Menu {
         //Check if url or url alternative
         if(action[0]!="." && action[0]!="#"){
             //if button, add class for targeting eventlistener
-            type1 = `<button class="nav-link icon-button ${action}">`
-            type2 = `</button>`
+            type1 = `<div class="nav-link icon-button ${action}">`
+            type2 = `</div>`
         }else{
             type1 = `<a class="nav-link icon-button" href="${action}">`
             type2 = `</a>`

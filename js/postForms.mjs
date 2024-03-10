@@ -47,6 +47,7 @@ export default class PostForm {
         this.container.addTagsButton = this.container.querySelector("#add-tags")
         this.container.tagInputs = document.querySelectorAll('.tagInput')
         this.container.addTagsButton.addEventListener('click',(event)=>tagsObject.addTag(event))
+
         //this.imageInput.addEventListener('change',()=>PostForm.updateImagePreview(event))
     }
     /**

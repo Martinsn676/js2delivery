@@ -150,9 +150,9 @@ export default class Post {
             let authorString = author.name
             count ++
             //Add edited if post is changed after original post
-            if (created != updated) {
-                editText = ' (edited)';
-            }
+            // if (created != updated) {
+            //     editText = ' (edited)';
+            // }
             //Add hidden classes above limit
             if(count>limit){
                 addPostClasses+="post-hidden"
@@ -224,7 +224,7 @@ export default class Post {
             if(daysDiff+hoursDiff===0){
                 minsText = `${minsDiff === 0 ? 'Less than 1 min' : minsDiff === 1 ? '1 min' : `${minsDiff} mins`}`;
             }
-            const postTime = daysText+hoursText+minsText
+            const postTime = daysText+hoursText+minsText+" ago"
             //Light disabling the reactions, I know I could just comment out, but wanted to keep it easily readable
             reactiosnHtml=""
             const url = media ? media.url : '';

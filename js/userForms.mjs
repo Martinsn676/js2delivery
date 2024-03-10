@@ -6,20 +6,43 @@ const Local = new LocalImport.default();
 const allUserForms = document.querySelectorAll('form')
 allUserForms.forEach(form => {
   form.addEventListener('submit', (event) => submitForm(event));
+    const passwordInput2 = form.querySelector('#passwordInput2');
+    if(passwordInput2){
+        passwordInput2.addEventListener('keyup',()=>{
+            const inputContainer = passwordInput2.closest('.form-part'); 
+            if(passwordMatches(form)){
+                inputContainer.classList.remove('is-invalid');
+                inputContainer.classList.add('is-valid');
+            }else{
+                inputContainer.classList.add('is-invalid');
+                inputContainer.classList.remove('is-valid');
+                console.log("match")
+            }
+        });
+    }
 });
-
+function isValidEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(noroff\.no|stud\.noroff\.no)$/; 
+    return emailRegex.test(email);
+}
+function passwordMatches(form){
+    const passwordInput = form.querySelector('#passwordInput');
+    const passwordInput2 = form.querySelector('#passwordInput2');
+    if(!passwordInput2){
+        return true
+    }else if(passwordInput.value===passwordInput2.value){
+        return true
+    }
+}
 async function submitForm(event) {
     event.preventDefault();
     const formTarget = event.target;
     const formID = event.target.id
-    const errorMessageText = formTarget.querySelector('#errorMessageText')
+    const errorMessageText = formTarget.querySelector('.error-message')
     errorMessageText.classList.add('d-none')
 
-    const emailInput = formTarget.querySelector('#emailInput');
-    function isValidEmail(email) {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@(noroff\.no|stud\.noroff\.no)$/; 
-        return emailRegex.test(email);
-    }
+    const emailInput = formTarget.querySelector('.email-input');
+
 
 
     if (formTarget.checkValidity() && isValidEmail(emailInput.value)) {
@@ -30,13 +53,15 @@ async function submitForm(event) {
             part.classList.add('is-valid');
         })
         //User releated input
-        const nameInput = formTarget.querySelector('#usernameInput');
+        const nameInput = formTarget.querySelector('.username-input');
         const name = nameInput ? nameInput.value : "";
 
-        const passwordInput = formTarget.querySelector('#passwordInput');
-        const password = passwordInput ? passwordInput.value : false;
+        const passwordInput = formTarget.querySelector('.password-input');
+        const passwordInput2 = formTarget.querySelector('.password-input-2');
+        if(passwordInput2 && passwordInput===passwordInput2){
 
-        const emailInput = formTarget.querySelector('#emailInput');
+        }
+        const password = passwordInput ? passwordInput.value : false; 
         const email = emailInput ? emailInput.value : false;
 
 
@@ -83,7 +108,6 @@ async function submitForm(event) {
             errorMessageText.classList.remove('d-none')
         }
         } else {
-
             const invalidInputs = formTarget.querySelectorAll(':invalid');
             invalidInputs.forEach(input => {
                 const inputContainer = input.closest('.form-part'); 
@@ -104,7 +128,6 @@ async function submitForm(event) {
             //Direct check for regex in form didnt work
             if(isValidEmail(emailInput.value)){
                 const inputContainer = emailInput.closest('.form-part'); 
-                console.log(inputContainer)
                 if (inputContainer) {
                     inputContainer.classList.remove('is-invalid');
                     inputContainer.classList.add('is-valid');
