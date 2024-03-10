@@ -2,7 +2,7 @@
 
 ![image](https://github.com/Martinsn676/js2delivery/blob/js2/files/Capture.PNG?raw=true)
 
-A simple overview of the use/purpose of the project.
+Another big time waste, of course I learn stuff, but this is homework or sideproject stuff. I am here to learn how to become a web developer, not practice being one, that I can do on my own time
 
 ## Description
 
@@ -16,10 +16,8 @@ A simple social media page with the nescessarry fucntions for this delivery, and
 
 ## Built With Visual Studio
 
-You can list a the tech stack that you've used over here
-
 - [Visual studio](https://code.visualstudio.com/)
-- 
+  
 ## Getting Started
 
 ### Installing
