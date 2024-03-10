@@ -1,6 +1,6 @@
 # js2delivery
 
-![image](https://github.com/Martinsn676/js2delivery/blob/js2/Capture.PNG?raw=true)
+![image](https://github.com/Martinsn676/js2delivery/blob/js2/files/Capture.PNG?raw=true)
 
 A simple overview of the use/purpose of the project.
 
