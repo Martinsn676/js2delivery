@@ -20,6 +20,12 @@ A simple social media page with the nescessarry fucntions for this delivery, and
   
 ## Getting Started
 
+###
+
+You can view the project here in a live page:
+
+- [Netlify](https://chipper-gumption-640296.netlify.app/index.html)
+
 ### Installing
 
 This is where you list how to get the project started. It typically just includes telling a person to clone the repo and then to install the dependencies e.g.
