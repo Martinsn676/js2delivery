@@ -29,8 +29,8 @@
     </div>
     <form id="loginForm" class="form-container col-12 mt-3 needs-validation" method="get" novalidate>
         <div class="form-part mt-3">
-            <label for="email" class="form-label">E-mail</label>
-            <input required type="email" class="form-control email-input" name="email" value="">
+            <label for="login-email" class="form-label">E-mail</label>
+            <input required type="email" id="login-email" class="form-control email-input" name="email" value="">
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -39,8 +39,8 @@
             </div>
         </div>
         <div class="form-part mt-3">
-            <label for="password" class="form-label">Password</label>
-            <input required type="password" class="password-input form-control" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
+            <label for="login-password" class="form-label">Password</label>
+            <input required type="password" id="login-password" class="password-input form-control" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
             <div class="invalid-feedback">
                 Password must be at least 8 characters long.
             </div>
@@ -53,8 +53,8 @@
     <div> ------ or ------ </div>
     <form id="creatUserForm" class="form-container col-12 needs-validation" method="get" novalidate>
         <div class="form-part mt-3">
-            <label for="userName" class="form-label">Username</label>
-            <input required type="text" class="form-control username-input"  name="username" value="">
+            <label for="crate-userame" class="form-label">Username</label>
+            <input required type="text" id="crate-userame" class="form-control username-input"  name="username" value="">
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -63,8 +63,8 @@
             </div>
         </div>
         <div class="form-part mt-3">
-            <label for="email" class="form-label">E-mail</label>
-            <input required type="email" class="form-control email-input" name="email" title="Please enter a valid email address ending with @noroff.no or @stud.noroff.no" value="">
+            <label for="create-email" class="form-label">E-mail</label>
+            <input required type="email" id="create-email" class="form-control email-input" name="email" title="Please enter a valid email address ending with @noroff.no or @stud.noroff.no" value="">
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -75,8 +75,8 @@
 
 
         <div class="form-part mt-3">
-            <label for="password" class="form-label">Password</label>
-            <input required type="password" class="form-control password-input" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
+            <label for="create-password" class="form-label">Password</label>
+            <input required type="password" id="create-password" class="form-control password-input" name="password" placeholder="Password" pattern=".{8,}" title="Password must be at least 8 characters long." value="">
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -86,8 +86,8 @@
 
         </div>
         <div class="form-part mt-3">
-            <label for="password2" class="form-label">Repeat password</label>
-            <input required type="password" class="form-control password-input-2" name="password2" placeholder="Password"  title="" value="">
+            <label for="create-password-2" class="form-label">Repeat password</label>
+            <input required type="password" id="create-password-2" class="form-control password-input-2" name="password2" placeholder="Password"  title="" value="">
             <div class="valid-feedback">
                 Password matches
             </div>
